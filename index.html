@@ -6,7 +6,6 @@
     <title>Quản Lý Tổ Chuyên Môn - AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Tùy chỉnh thanh cuộn cho bảng ngang */
         .table-container::-webkit-scrollbar { height: 8px; }
         .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .table-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -20,8 +19,8 @@
             <h1 class="text-xl font-bold tracking-wider">TỔ CHUYÊN MÔN</h1>
         </div>
         <nav class="flex-1 p-4 space-y-3">
-            <button onclick="switchTab('tongquan')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition bg-indigo-900 font-medium shadow-inner">Tổng quan</button>
-            <button onclick="switchTab('kehoach')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Kế hoạch</button>
+            <button onclick="switchTab('tongquan')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Tổng quan</button>
+            <button onclick="switchTab('kehoach')" class="tab-link w-full text-left block px-4 py-2.5 bg-indigo-900 font-medium shadow-inner rounded transition">Kế hoạch giáo dục</button>
             <button onclick="switchTab('nganhang')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Ngân hàng câu hỏi</button>
         </nav>
     </aside>
@@ -30,7 +29,7 @@
     <main class="flex-1 p-8 overflow-y-auto">
         
         <!-- PHÂN HỆ: TỔNG QUAN -->
-        <div id="tongquan" class="tab-content max-w-[1200px] mx-auto">
+        <div id="tongquan" class="tab-content hidden max-w-[1200px] mx-auto">
             <header class="mb-8 border-b pb-4">
                 <h2 class="text-3xl font-bold text-gray-800">Tổng quan</h2>
                 <p class="text-gray-500 mt-2">Bảng điều khiển và danh sách nhân sự Tổ chuyên môn.</p>
@@ -49,178 +48,73 @@
                                 <th class="py-3 px-4 border border-gray-200 font-semibold">Phân công giảng dạy</th>
                                 <th class="py-3 px-4 border border-gray-200 font-semibold text-center">Đảng viên</th>
                                 <th class="py-3 px-4 border border-gray-200 font-semibold">Kiêm nhiệm</th>
-                                <th class="py-3 px-4 border border-gray-200 font-semibold">Ghi Chú</th>
                             </tr>
                         </thead>
                         <tbody class="text-sm text-gray-700">
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">1</td>
-                                <td class="py-2 px-4 border border-gray-200 font-bold text-indigo-700">Nguyễn Văn Tâm</td>
-                                <td class="py-2 px-4 border border-gray-200">0987023770</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">1986</td>
-                                <td class="py-2 px-4 border border-gray-200">Thạc sĩ Toán học</td>
-                                <td class="py-2 px-4 border border-gray-200">12A3, 12A6, 12A7</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
-                                <td class="py-2 px-4 border border-gray-200">TTCM+CN 12A3</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">2</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Quang Trãi</td>
-                                <td class="py-2 px-4 border border-gray-200">0916298272</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">1985</td>
-                                <td class="py-2 px-4 border border-gray-200">Toán - Tin học</td>
-                                <td class="py-2 px-4 border border-gray-200">12A8,12A9,11A5,11A6</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
-                                <td class="py-2 px-4 border border-gray-200">GVCN 12A8</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">3</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Phan Ngọc Trinh</td>
-                                <td class="py-2 px-4 border border-gray-200">0988251350</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">1988</td>
-                                <td class="py-2 px-4 border border-gray-200">Cử nhân SP Toán học</td>
-                                <td class="py-2 px-4 border border-gray-200">12A1, 12A2, 10A9, 10A10</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
-                                <td class="py-2 px-4 border border-gray-200">GVCN 12A1</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">4</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Phạm Phùng Khánh Tú</td>
-                                <td class="py-2 px-4 border border-gray-200">0977738408</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">1992</td>
-                                <td class="py-2 px-4 border border-gray-200">Thạc sĩ Toán học</td>
-                                <td class="py-2 px-4 border border-gray-200">10A7, 10A8, 12A4, 12A5</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
-                                <td class="py-2 px-4 border border-gray-200">GVCN 12A4</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">5</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Cao Thị Thu</td>
-                                <td class="py-2 px-4 border border-gray-200">0989963183</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">1993</td>
-                                <td class="py-2 px-4 border border-gray-200">Cử nhân SP Toán học</td>
-                                <td class="py-2 px-4 border border-gray-200">10A1, 12A10, 12A11</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
-                                <td class="py-2 px-4 border border-gray-200">CN 10A1</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">6</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Thị Huyền Trân</td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200 text-center"></td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200 text-orange-600 font-medium">Nghỉ hậu sản</td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">7</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Đặng Kim Thoa</td>
-                                <td class="py-2 px-4 border border-gray-200">0966469202</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">2001</td>
-                                <td class="py-2 px-4 border border-gray-200">Cử nhân SP Toán học</td>
-                                <td class="py-2 px-4 border border-gray-200">10A2, 10A3, 11A1, 11A2</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
-                                <td class="py-2 px-4 border border-gray-200">CN 11A1</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">8</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Trung Hậu</td>
-                                <td class="py-2 px-4 border border-gray-200">0338163672</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">2003</td>
-                                <td class="py-2 px-4 border border-gray-200">Cử nhân SP Toán học</td>
-                                <td class="py-2 px-4 border border-gray-200">10A4, 10A5, 11A7, 11A8</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
-                                <td class="py-2 px-4 border border-gray-200">CN 11A8</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">9</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Nguyễn Bảo Ngưng</td>
-                                <td class="py-2 px-4 border border-gray-200">0834988133</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">1985</td>
-                                <td class="py-2 px-4 border border-gray-200 whitespace-normal min-w-[200px]">Kĩ sư Tin học-CC NVSP bậc 2</td>
-                                <td class="py-2 px-4 border border-gray-200">10A6,7,8,9-12A8,9</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
-                                <td class="py-2 px-4 border border-gray-200 text-indigo-700 font-medium">Tổ phó CM + CNTT + PM</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">10</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Thị Thanh Tuyền</td>
-                                <td class="py-2 px-4 border border-gray-200">0366699470</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">1990</td>
-                                <td class="py-2 px-4 border border-gray-200">Kĩ sư CNTT</td>
-                                <td class="py-2 px-4 border border-gray-200">11A7,8-12A10,11</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
-                                <td class="py-2 px-4 border border-gray-200">CN 12A10</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">11</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Trần Thị Thảo</td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200 text-center"></td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">12</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Nguyễn Mạnh Tiến</td>
-                                <td class="py-2 px-4 border border-gray-200">0372818288</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">1999</td>
-                                <td class="py-2 px-4 border border-gray-200">Thạc sĩ Vật lý</td>
-                                <td class="py-2 px-4 border border-gray-200 whitespace-normal min-w-[200px]">10A3, 10A4, 10A5 - 11A1, 11A2, 11A3, 11A7, 11A8</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">13</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Nguyễn Hoàng Phương</td>
-                                <td class="py-2 px-4 border border-gray-200"></td>
-                                <td class="py-2 px-4 border border-gray-200 text-center"></td>
-                                <td class="py-2 px-4 border border-gray-200">Kỹ sư Điện - Điện tử</td>
-                                <td class="py-2 px-4 border border-gray-200">Phụ trách theo dõi các lớp nghề</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">x</td>
-                                <td class="py-2 px-4 border border-gray-200">CN lớp TC CNKT ô tô</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
-                            <tr class="hover:bg-indigo-50 transition">
-                                <td class="py-2 px-4 border border-gray-200 text-center">14</td>
-                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Hồ Minh Khương</td>
-                                <td class="py-2 px-4 border border-gray-200">0977675850</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center">1985</td>
-                                <td class="py-2 px-4 border border-gray-200">Cử nhân cao đẳng cơ khí</td>
-                                <td class="py-2 px-4 border border-gray-200">Lớp nghề</td>
-                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
-                                <td class="py-2 px-4 border border-gray-200">Chủ nhiệm lớp cơ khí</td>
-                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
-                            </tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">1</td><td class="py-2 px-4 border font-bold text-indigo-700">Nguyễn Văn Tâm</td><td class="py-2 px-4 border">0987023770</td><td class="py-2 px-4 border text-center">1986</td><td class="py-2 px-4 border">Thạc sĩ Toán học</td><td class="py-2 px-4 border">12A3, 12A6, 12A7</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">TTCM+CN 12A3</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">2</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Quang Trãi</td><td class="py-2 px-4 border">0916298272</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Toán - Tin học</td><td class="py-2 px-4 border">12A8,12A9,11A5,11A6</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">GVCN 12A8</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">3</td><td class="py-2 px-4 border font-medium text-gray-900">Phan Ngọc Trinh</td><td class="py-2 px-4 border">0988251350</td><td class="py-2 px-4 border text-center">1988</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">12A1, 12A2, 10A9</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">GVCN 12A1</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">4</td><td class="py-2 px-4 border font-medium text-gray-900">Phạm Phùng Khánh Tú</td><td class="py-2 px-4 border">0977738408</td><td class="py-2 px-4 border text-center">1992</td><td class="py-2 px-4 border">Thạc sĩ Toán học</td><td class="py-2 px-4 border">10A7, 10A8, 12A4, 12A5</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">GVCN 12A4</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">5</td><td class="py-2 px-4 border font-medium text-gray-900">Cao Thị Thu</td><td class="py-2 px-4 border">0989963183</td><td class="py-2 px-4 border text-center">1993</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">10A1, 12A10, 12A11</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">CN 10A1</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">6</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Thị Huyền Trân</td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border text-orange-600">Nghỉ hậu sản</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">7</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Đặng Kim Thoa</td><td class="py-2 px-4 border">0966469202</td><td class="py-2 px-4 border text-center">2001</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">10A2, 10A3, 11A1, 11A2</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">CN 11A1</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">8</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Trung Hậu</td><td class="py-2 px-4 border">0338163672</td><td class="py-2 px-4 border text-center">2003</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">10A4, 10A5, 11A7, 11A8</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">CN 11A8</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">9</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Bảo Ngưng</td><td class="py-2 px-4 border">0834988133</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Kĩ sư Tin học-CC NVSP bậc 2</td><td class="py-2 px-4 border">10A6,7,8,9-12A8,9</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border text-indigo-700">Tổ phó CM</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">10</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Thị Thanh Tuyền</td><td class="py-2 px-4 border">0366699470</td><td class="py-2 px-4 border text-center">1990</td><td class="py-2 px-4 border">Kĩ sư CNTT</td><td class="py-2 px-4 border">11A7,8-12A10,11</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">CN 12A10</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">11</td><td class="py-2 px-4 border font-medium text-gray-900">Trần Thị Thảo</td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border"></td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">12</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Mạnh Tiến</td><td class="py-2 px-4 border">0372818288</td><td class="py-2 px-4 border text-center">1999</td><td class="py-2 px-4 border">Thạc sĩ Vật lý</td><td class="py-2 px-4 border">10A3-5, 11A1-3, 11A7-8</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border"></td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">13</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Hoàng Phương</td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border">Kỹ sư Điện - Điện tử</td><td class="py-2 px-4 border">Lớp nghề</td><td class="py-2 px-4 border text-center text-green-600 font-bold">x</td><td class="py-2 px-4 border">CN lớp TC CNKT ô tô</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">14</td><td class="py-2 px-4 border font-medium text-gray-900">Hồ Minh Khương</td><td class="py-2 px-4 border">0977675850</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Cử nhân cao đẳng cơ khí</td><td class="py-2 px-4 border">Lớp nghề</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">Chủ nhiệm lớp cơ khí</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- PHÂN HỆ: KẾ HOẠCH -->
-        <div id="kehoach" class="tab-content hidden max-w-5xl mx-auto">
+        <!-- PHÂN HỆ: KẾ HOẠCH GIÁO DỤC -->
+        <div id="kehoach" class="tab-content max-w-[1200px] mx-auto">
             <header class="mb-8 border-b pb-4">
-                <h2 class="text-3xl font-bold text-gray-800">Kế hoạch</h2>
-                <p class="text-gray-500 mt-2">Quản lý lịch dự giờ, thao giảng và kế hoạch bài dạy.</p>
+                <h2 class="text-3xl font-bold text-gray-800">Kế hoạch giáo dục</h2>
+                <p class="text-gray-500 mt-2">Tra cứu phân phối chương trình chi tiết các bộ môn.</p>
             </header>
-            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                <p class="text-gray-600">Danh sách các kế hoạch chuyên môn trong năm học sẽ hiển thị ở khu vực này.</p>
+            
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <!-- Bộ lọc Dữ liệu -->
+                <div class="flex gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Môn học</label>
+                        <select id="filter-mon" onchange="renderPlan()" class="w-full border-gray-300 rounded-md shadow-sm p-2 outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="Toán">Môn Toán</option>
+                            <option value="Tin học">Môn Tin học</option>
+                            <option value="Công nghệ">Môn Công nghệ</option>
+                        </select>
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Khối lớp</label>
+                        <select id="filter-khoi" onchange="renderPlan()" class="w-full border-gray-300 rounded-md shadow-sm p-2 outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="10">Khối 10</option>
+                            <option value="11">Khối 11</option>
+                            <option value="12">Khối 12</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Bảng Dữ liệu Động -->
+                <div class="overflow-x-auto table-container">
+                    <table class="w-full text-left border-collapse whitespace-normal min-w-[800px]">
+                        <thead>
+                            <tr class="bg-indigo-600 text-white text-sm">
+                                <th class="py-3 px-4 border border-indigo-700 font-semibold w-24 text-center">Tuần</th>
+                                <th class="py-3 px-4 border border-indigo-700 font-semibold w-24 text-center">Tiết PPCT</th>
+                                <th class="py-3 px-4 border border-indigo-700 font-semibold w-1/3">Tên bài / Chủ đề</th>
+                                <th class="py-3 px-4 border border-indigo-700 font-semibold">Yêu cầu cần đạt cơ bản</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plan-tbody" class="text-sm text-gray-700">
+                            <!-- Dữ liệu sẽ được JS đẩy vào đây -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -238,7 +132,7 @@
                 </h3>
                 
                 <div class="flex gap-3 mb-6">
-                    <input type="text" id="aiTopic" placeholder="Nhập chủ đề (VD: Hàm số mũ, Phép chia đa thức...)" 
+                    <input type="text" id="aiTopic" placeholder="Nhập chủ đề (VD: Số phức, Di truyền học...)" 
                            class="flex-1 border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
                     <button onclick="generateAI()" 
                             class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-lg shadow transition flex items-center">
@@ -255,7 +149,7 @@
     </main>
 
     <script>
-        // Lệnh điều hướng chuyển đổi giữa các Tab
+        // Điều hướng Menu chính
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
@@ -269,9 +163,124 @@
             activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner');
         }
 
-        // =========================================================
+        // ================= KHO DỮ LIỆU KẾ HOẠCH GIÁO DỤC =================
+        const planData = [
+            // TOÁN 10
+            { mon: "Toán", khoi: "10", tuan: "1-3", tiet: "1-4", bai: "Chương I: Mệnh đề", yeucau: "Thiết lập, phát biểu mệnh đề toán học. Xác định tính đúng sai của mệnh đề." },
+            { mon: "Toán", khoi: "10", tuan: "3-4", tiet: "5-8", bai: "Chương I: Tập hợp và phép toán", yeucau: "Nhận biết tập hợp, thực hiện phép toán giao, hợp, hiệu, phần bù." },
+            { mon: "Toán", khoi: "10", tuan: "4-5", tiet: "10-14", bai: "Chương II: Phương trình & Hệ BPT bậc nhất hai ẩn", yeucau: "Biểu diễn miền nghiệm của BPT, hệ BPT. Giải bài toán thực tiễn cực trị." },
+            { mon: "Toán", khoi: "10", tuan: "6-8", tiet: "16-21", bai: "Chương III: Hệ thức lượng trong tam giác", yeucau: "Tính giá trị lượng giác từ 0-180 độ. Giải thích định lí côsin, sin và diện tích." },
+            { mon: "Toán", khoi: "10", tuan: "9-12", tiet: "26-34", bai: "Chương IV: Vectơ & Tọa độ", yeucau: "Thực hiện phép tổng, hiệu, tích vectơ với một số. Tìm tọa độ vectơ." },
+            { mon: "Toán", khoi: "10", tuan: "13-15", tiet: "35-45", bai: "Chương V: Số đặc trưng của mẫu số liệu", yeucau: "Tính số trung bình, trung vị, tứ phân vị, phương sai, độ lệch chuẩn." },
+            { mon: "Toán", khoi: "10", tuan: "19-21", tiet: "55-64", bai: "Chương VI: Hàm số & Đồ thị (Hàm bậc hai)", yeucau: "Vẽ parabol, xét dấu tam thức bậc hai, giải BPT bậc hai." },
+            { mon: "Toán", khoi: "10", tuan: "22-25", tiet: "68-78", bai: "Chương VII: Tọa độ mặt phẳng (Đường thẳng, Conic)", yeucau: "Viết phương trình đường thẳng, đường tròn. Nhận biết Elip, Hyperbol, Parabol." },
+            { mon: "Toán", khoi: "10", tuan: "26-28", tiet: "83-92", bai: "Chương VIII: Đại số tổ hợp", yeucau: "Vận dụng quy tắc cộng, nhân, hoán vị, chỉnh hợp, tổ hợp. Nhị thức Newton." },
+            { mon: "Toán", khoi: "10", tuan: "29-31", tiet: "94-98", bai: "Chương IX: Tính xác suất cổ điển", yeucau: "Xác định không gian mẫu, tính xác suất biến cố cơ bản." },
+
+            // TOÁN 11
+            { mon: "Toán", khoi: "11", tuan: "1-3", tiet: "1-8", bai: "Chương I: Hàm số & Phương trình lượng giác", yeucau: "Nhận biết góc lượng giác, công thức lượng giác, vẽ đồ thị và giải phương trình." },
+            { mon: "Toán", khoi: "11", tuan: "4-6", tiet: "11-16", bai: "Chương II: Dãy số, Cấp số cộng, Cấp số nhân", yeucau: "Nhận biết tính tăng/giảm dãy số. Tính tổng n số hạng cấp số cộng, nhân." },
+            { mon: "Toán", khoi: "11", tuan: "7-8", tiet: "17-21", bai: "Chương III: Số đặc trưng đo xu thế trung tâm ghép nhóm", yeucau: "Tính trung bình, trung vị, tứ phân vị, mốt cho mẫu số liệu ghép nhóm." },
+            { mon: "Toán", khoi: "11", tuan: "9-13", tiet: "28-38", bai: "Chương IV: Quan hệ song song trong không gian", yeucau: "Xác định giao tuyến, giao điểm. Chứng minh đường thẳng, mặt phẳng song song." },
+            { mon: "Toán", khoi: "11", tuan: "14-15", tiet: "40-45", bai: "Chương V: Giới hạn & Hàm số liên tục", yeucau: "Tính giới hạn dãy số, hàm số. Xét tính liên tục của hàm số." },
+            { mon: "Toán", khoi: "11", tuan: "19-21", tiet: "55-61", bai: "Chương VI: Hàm số Mũ và Lôgarit", yeucau: "Giải thích tính chất lũy thừa, lôgarit. Giải phương trình, BPT mũ & lôgarit." },
+            { mon: "Toán", khoi: "11", tuan: "22-26", tiet: "63-78", bai: "Chương VII: Quan hệ vuông góc trong không gian", yeucau: "Chứng minh đường vuông góc mặt. Tính góc, khoảng cách, thể tích khối chóp/lăng trụ." },
+            { mon: "Toán", khoi: "11", tuan: "28-30", tiet: "83-90", bai: "Chương VIII: Các quy tắc tính xác suất", yeucau: "Tính xác suất biến cố hợp, giao độc lập. Vận dụng công thức cộng, nhân." },
+            { mon: "Toán", khoi: "11", tuan: "31-33", tiet: "92-97", bai: "Chương IX: Đạo hàm", yeucau: "Tính đạo hàm hàm sơ cấp, tiếp tuyến đồ thị. Ý nghĩa vật lí của đạo hàm." },
+
+            // TOÁN 12
+            { mon: "Toán", khoi: "12", tuan: "1-4", tiet: "1-13", bai: "Chương I: Ứng dụng đạo hàm khảo sát hàm số", yeucau: "Xét tính đơn điệu, cực trị, GTLN/GTNN, đường tiệm cận. Vẽ đồ thị hàm số." },
+            { mon: "Toán", khoi: "12", tuan: "10-13", tiet: "27-39", bai: "Chương II: Vectơ và Hệ trục tọa độ không gian", yeucau: "Thực hiện phép toán vectơ trong Oxyz, tích vô hướng, ứng dụng thực tiễn." },
+            { mon: "Toán", khoi: "12", tuan: "14-15", tiet: "42-44", bai: "Chương III: Số đặc trưng đo mức độ phân tán (Ghép nhóm)", yeucau: "Tính khoảng biến thiên, tứ phân vị, phương sai, độ lệch chuẩn." },
+            { mon: "Toán", khoi: "12", tuan: "19-23", tiet: "55-67", bai: "Chương IV: Nguyên hàm và Tích phân", yeucau: "Tìm nguyên hàm, tính tích phân. Ứng dụng tính diện tích, thể tích khối tròn xoay." },
+            { mon: "Toán", khoi: "12", tuan: "25-31", tiet: "73-89", bai: "Chương V: Phương pháp tọa độ trong không gian Oxyz", yeucau: "Viết phương trình mặt phẳng, đường thẳng, mặt cầu. Tính khoảng cách, góc." },
+            { mon: "Toán", khoi: "12", tuan: "32-34", tiet: "92-98", bai: "Chương VI: Xác suất có điều kiện", yeucau: "Sử dụng công thức nhân xác suất, xác suất toàn phần và công thức Bayes." },
+
+            // TIN HỌC 10
+            { mon: "Tin học", khoi: "10", tuan: "1-2", tiet: "1-4", bai: "CĐ 1: Máy tính và Xã hội tri thức", yeucau: "Phân biệt thông tin/dữ liệu. Vai trò của thiết bị thông minh và mạng máy tính." },
+            { mon: "Tin học", khoi: "10", tuan: "4-6", tiet: "7-12", bai: "CĐ 2: Mạng máy tính và Internet", yeucau: "Hiểu mạng LAN, Internet, Điện toán đám mây. An toàn mạng, phòng chống lừa đảo." },
+            { mon: "Tin học", khoi: "10", tuan: "6-7", tiet: "13-15", bai: "CĐ 3: Đạo đức, pháp luật, văn hóa số", yeucau: "Ứng xử trên môi trường số, tôn trọng bản quyền, tránh thông tin độc hại." },
+            { mon: "Tin học", khoi: "10", tuan: "8-12", tiet: "16-24", bai: "CĐ 4: Thiết kế đồ họa (Inkscape)", yeucau: "Thiết kế logo, đồ họa vectơ, làm việc với lớp, đối tượng đường, văn bản." },
+            { mon: "Tin học", khoi: "10", tuan: "12-18", tiet: "25-36", bai: "CĐ 5: Lập trình Python cơ bản", yeucau: "Sử dụng biến, lệnh nhập/xuất, cấu trúc rẽ nhánh IF, vòng lặp FOR, WHILE." },
+            { mon: "Tin học", khoi: "10", tuan: "HK2", tiet: "37-45", bai: "CĐ 5: Lập trình Python (Tiếp theo)", yeucau: "Kiểu dữ liệu danh sách (List), xử lý xâu kí tự, định nghĩa Hàm." },
+            { mon: "Tin học", khoi: "10", tuan: "HK2", tiet: "46-52", bai: "CĐ 5: Gỡ lỗi và Kiểm thử", yeucau: "Nhận biết lỗi, kiểm thử chương trình, sử dụng công cụ debug." },
+            { mon: "Tin học", khoi: "10", tuan: "HK2", tiet: "55-60", bai: "CĐ 6: Hướng nghiệp với Tin học", yeucau: "Tìm hiểu nghề thiết kế đồ họa, phát triển phần mềm, chuẩn bị lộ trình học." },
+
+            // TIN HỌC 11
+            { mon: "Tin học", khoi: "11", tuan: "1-2", tiet: "1-4", bai: "CĐ 1: Hệ điều hành & Phần mềm", yeucau: "Lịch sử hệ điều hành, phân biệt phần mềm mã nguồn mở và thương mại." },
+            { mon: "Tin học", khoi: "11", tuan: "4-5", tiet: "7-10", bai: "CĐ 1: Bên trong máy tính", yeucau: "Cấu trúc phần cứng, mạch logic AND, OR, NOT. Kết nối thiết bị ngoại vi." },
+            { mon: "Tin học", khoi: "11", tuan: "6-8", tiet: "11-16", bai: "CĐ 2: Lưu trữ & Tìm kiếm thông tin", yeucau: "Lưu trữ đám mây, tối ưu tìm kiếm, sử dụng thư điện tử và mạng xã hội nâng cao." },
+            { mon: "Tin học", khoi: "11", tuan: "10-14", tiet: "20-28", bai: "CĐ 4: Hệ quản trị CSDL", yeucau: "Khái niệm CSDL, hệ quản trị CSDL, mô hình quan hệ, khóa chính, khóa ngoài." },
+            { mon: "Tin học", khoi: "11", tuan: "15-16", tiet: "29-32", bai: "CĐ 4: SQL Cơ bản", yeucau: "Sử dụng SQL truy vấn dữ liệu (SELECT, INSERT, UPDATE). Bảo mật hệ CSDL." },
+            { mon: "Tin học", khoi: "11", tuan: "19-24", tiet: "37-48", bai: "CĐ 6: Thực hành CSDL (HeidiSQL)", yeucau: "Tạo bảng, thiết lập khóa, truy vấn liên kết bảng (JOIN), sao lưu dữ liệu." },
+            { mon: "Tin học", khoi: "11", tuan: "25-28", tiet: "49-56", bai: "CĐ 7: Chỉnh sửa ảnh", yeucau: "Cắt ghép ảnh, tinh chỉnh màu sắc, công cụ vẽ, tạo ảnh động." },
+            { mon: "Tin học", khoi: "11", tuan: "29-31", tiet: "57-62", bai: "CĐ 7: Làm video & Phim hoạt hình", yeucau: "Biên tập video, chèn âm thanh, tạo phim hoạt hình có phụ đề và hiệu ứng." },
+
+            // TIN HỌC 12
+            { mon: "Tin học", khoi: "12", tuan: "1-2", tiet: "1-4", bai: "CĐ 1: Trí tuệ nhân tạo (AI)", yeucau: "Khái niệm AI, hệ chuyên gia, suy luận logic. Lợi ích và mặt trái của AI." },
+            { mon: "Tin học", khoi: "12", tuan: "4-6", tiet: "7-12", bai: "CĐ 4: HTML và Cấu trúc web", yeucau: "Sử dụng thẻ HTML cơ bản, định dạng văn bản, tạo danh sách, bảng." },
+            { mon: "Tin học", khoi: "12", tuan: "7-9", tiet: "13-18", bai: "CĐ 4: HTML Nâng cao & CSS", yeucau: "Tạo liên kết, chèn đa phương tiện, tạo form biểu mẫu. Khái niệm CSS." },
+            { mon: "Tin học", khoi: "12", tuan: "10-15", tiet: "19-30", bai: "CĐ 4: Định dạng CSS", yeucau: "Màu sắc, phông chữ, định dạng khung (Box model), mức độ ưu tiên bộ chọn." },
+            { mon: "Tin học", khoi: "12", tuan: "19-20", tiet: "37-40", bai: "CĐ 2: Mạng & Giao thức TCP/IP", yeucau: "Thiết bị mạng (Router, Switch). Giao thức TCP/IP, chia sẻ tài nguyên mạng LAN." },
+            { mon: "Tin học", khoi: "12", tuan: "22-25", tiet: "43-50", bai: "CĐ 5: Hướng nghiệp CNTT", yeucau: "Bảo trì máy tính, Quản trị mạng, Bảo mật hệ thống. Định hướng nghề nghiệp." },
+            { mon: "Tin học", khoi: "12", tuan: "26-31", tiet: "51-62", bai: "CĐ 7: Xây dựng Website (Google Sites)", yeucau: "Tạo header, footer, liên kết điều hướng, nhúng biểu mẫu, xuất bản website." },
+
+            // CÔNG NGHỆ 10
+            { mon: "Công nghệ", khoi: "10", tuan: "1-4", tiet: "1-8", bai: "Chương I: Đại cương về Công nghệ", yeucau: "Khái niệm khoa học kĩ thuật, công nghệ phổ biến, công nghệ mới." },
+            { mon: "Công nghệ", khoi: "10", tuan: "5-10", tiet: "9-20", bai: "Chương I: Đánh giá & Hướng nghiệp", yeucau: "Tiêu chí đánh giá công nghệ, cách mạng công nghiệp, ngành nghề kĩ thuật." },
+            { mon: "Công nghệ", khoi: "10", tuan: "11-17", tiet: "21-34", bai: "Chương II: Vẽ kĩ thuật cơ bản", yeucau: "Tiêu chuẩn bản vẽ, vẽ hình chiếu vuông góc, mặt cắt, hình chiếu trục đo, phối cảnh." },
+            { mon: "Công nghệ", khoi: "10", tuan: "19-24", tiet: "37-48", bai: "Chương II: Bản vẽ chuyên ngành & CAD", yeucau: "Biểu diễn ren, đọc bản vẽ cơ khí, bản vẽ xây dựng. Sử dụng máy tính hỗ trợ thiết kế." },
+            { mon: "Công nghệ", khoi: "10", tuan: "26-34", tiet: "51-68", bai: "Chương III: Thiết kế kĩ thuật", yeucau: "Quy trình thiết kế, yếu tố ảnh hưởng, nguyên tắc thiết kế. Dự án thiết kế sản phẩm." },
+
+            // CÔNG NGHỆ 11
+            { mon: "Công nghệ", khoi: "11", tuan: "1-2", tiet: "1-4", bai: "Chương I: Cơ khí chế tạo", yeucau: "Khái quát và ngành nghề trong lĩnh vực cơ khí chế tạo." },
+            { mon: "Công nghệ", khoi: "11", tuan: "3-7", tiet: "5-14", bai: "Chương II: Vật liệu cơ khí", yeucau: "Tính chất vật liệu kim loại, phi kim, hợp kim và vật liệu mới." },
+            { mon: "Công nghệ", khoi: "11", tuan: "8-13", tiet: "15-26", bai: "Chương III: Gia công cơ khí", yeucau: "Phương pháp gia công cắt gọt. Lập quy trình công nghệ chế tạo chi tiết." },
+            { mon: "Công nghệ", khoi: "11", tuan: "14-17", tiet: "27-34", bai: "Chương IV: Sản xuất cơ khí & Tự động hóa", yeucau: "Dây chuyền tự động với robot, an toàn lao động, cách mạng CN 4.0." },
+            { mon: "Công nghệ", khoi: "11", tuan: "19-21", tiet: "37-42", bai: "Chương V: Cơ khí động lực", yeucau: "Khái quát cơ khí động lực, cấu tạo hệ thống và ngành nghề liên quan." },
+            { mon: "Công nghệ", khoi: "11", tuan: "21-27", tiet: "43-54", bai: "CĐ 6: Động cơ đốt trong", yeucau: "Nguyên lí làm việc, cơ cấu trục khuỷu, phân phối khí, hệ thống bôi trơn, làm mát." },
+            { mon: "Công nghệ", khoi: "11", tuan: "29-34", tiet: "57-68", bai: "CĐ 7: Ô tô", yeucau: "Hệ thống truyền lực, bánh xe, hệ thống treo, hệ thống lái, hệ thống phanh an toàn." },
+
+            // CÔNG NGHỆ 12
+            { mon: "Công nghệ", khoi: "12", tuan: "1-2", tiet: "1-4", bai: "Chương 1: Kĩ thuật điện", yeucau: "Tổng quan, vai trò và ngành nghề trong kĩ thuật điện." },
+            { mon: "Công nghệ", khoi: "12", tuan: "3-7", tiet: "5-14", bai: "Chương 2: Hệ thống điện quốc gia", yeucau: "Mạch điện xoay chiều 3 pha, sản xuất điện năng, mạng điện sản xuất & hạ áp." },
+            { mon: "Công nghệ", khoi: "12", tuan: "9-11", tiet: "17-26", bai: "Chương 3: Hệ thống điện gia đình", yeucau: "Sơ đồ nguyên lí, thiết bị điện đóng cắt. Thiết kế lắp ráp mạch điện điều khiển." },
+            { mon: "Công nghệ", khoi: "12", tuan: "12-13", tiet: "27-30", bai: "Chương 4: An toàn và tiết kiệm điện", yeucau: "Biện pháp an toàn điện và sử dụng điện năng tiết kiệm." },
+            { mon: "Công nghệ", khoi: "12", tuan: "14-18", tiet: "31-40", bai: "Chương 5 & 6: Kĩ thuật điện tử & Linh kiện", yeucau: "Khái quát điện tử, điện trở, tụ điện, cuộn cảm, diode, transistor, IC." },
+            { mon: "Công nghệ", khoi: "12", tuan: "20-22", tiet: "41-48", bai: "Chương 7: Điện tử tương tự", yeucau: "Mạch khuếch đại thuật toán, thực hành lắp ráp mạch điện tử cơ bản." },
+            { mon: "Công nghệ", khoi: "12", tuan: "23-26", tiet: "49-56", bai: "Chương 8: Điện tử số", yeucau: "Tín hiệu số, cổng logic cơ bản. Thực hành mạch báo cháy dùng cổng logic." },
+            { mon: "Công nghệ", khoi: "12", tuan: "27-29", tiet: "57-64", bai: "Chương 9: Vi điều khiển", yeucau: "Sơ đồ vi điều khiển, bo mạch lập trình. Mạch tự điều chỉnh độ sáng LED." }
+        ];
+
+        function renderPlan() {
+            const mon = document.getElementById('filter-mon').value;
+            const khoi = document.getElementById('filter-khoi').value;
+            const tbody = document.getElementById('plan-tbody');
+            
+            // Lọc dữ liệu
+            const filtered = planData.filter(item => item.mon === mon && item.khoi === khoi);
+            
+            // Render HTML
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-gray-500">Đang cập nhật dữ liệu...</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(item => `
+                <tr class="hover:bg-indigo-50 transition border-b border-gray-100">
+                    <td class="py-3 px-4 text-center font-medium">${item.tuan}</td>
+                    <td class="py-3 px-4 text-center font-medium">${item.tiet}</td>
+                    <td class="py-3 px-4 font-bold text-gray-900">${item.bai}</td>
+                    <td class="py-3 px-4 text-gray-600 leading-relaxed">${item.yeucau}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Khởi tạo bảng ngay khi load trang
+        window.onload = renderPlan;
+
+        // ================= KẾT NỐI GEMINI AI =================
         const GEMINI_API_KEY = 'AQ.Ab8RN6KWl68cJh-blZxfUmbdEm6x6UFx_Bbrf4-aNTucP_sEuw'; 
-        // =========================================================
 
         async function generateAI() {
             const topic = document.getElementById('aiTopic').value.trim();
