@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Tổ Chuyên Môn - AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-indigo-800 text-white flex flex-col shadow-lg">
+        <div class="p-6 border-b border-indigo-700 text-center">
+            <h1 class="text-xl font-bold tracking-wider">TỔ CHUYÊN MÔN</h1>
+        </div>
+        <nav class="flex-1 p-4 space-y-3">
+            <button onclick="switchTab('tongquan')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Tổng quan</button>
+            <button onclick="switchTab('kehoach')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Kế hoạch</button>
+            <button onclick="switchTab('nganhang')" class="tab-link w-full text-left block px-4 py-2.5 bg-indigo-900 rounded font-medium shadow-inner">Ngân hàng câu hỏi</button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 overflow-y-auto">
+        
+        <!-- PHÂN HỆ: TỔNG QUAN -->
+        <div id="tongquan" class="tab-content hidden max-w-5xl mx-auto">
+            <header class="mb-8 border-b pb-4">
+                <h2 class="text-3xl font-bold text-gray-800">Tổng quan</h2>
+                <p class="text-gray-500 mt-2">Bảng điều khiển và thống kê dữ liệu chung của Tổ chuyên môn.</p>
+            </header>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                <p class="text-gray-600">Giao diện thống kê báo cáo (Biểu đồ phổ điểm, tiến độ chương trình...) sẽ được tích hợp tại đây.</p>
+            </div>
+        </div>
+
+        <!-- PHÂN HỆ: KẾ HOẠCH -->
+        <div id="kehoach" class="tab-content hidden max-w-5xl mx-auto">
+            <header class="mb-8 border-b pb-4">
+                <h2 class="text-3xl font-bold text-gray-800">Kế hoạch</h2>
+                <p class="text-gray-500 mt-2">Quản lý lịch dự giờ, thao giảng và kế hoạch bài dạy.</p>
+            </header>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                <p class="text-gray-600">Danh sách các kế hoạch chuyên môn trong năm học sẽ hiển thị ở khu vực này.</p>
+            </div>
+        </div>
+
+        <!-- PHÂN HỆ: NGÂN HÀNG CÂU HỎI & AI -->
+        <div id="nganhang" class="tab-content max-w-3xl mx-auto">
+            <header class="mb-8 border-b pb-4">
+                <h2 class="text-3xl font-bold text-gray-800">Ngân hàng câu hỏi & AI</h2>
+                <p class="text-gray-500 mt-2">Hỗ trợ tự động tạo đề kiểm tra trắc nghiệm bằng Trợ lý AI.</p>
+            </header>
+
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-lg font-semibold mb-4 text-indigo-600 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Tạo câu hỏi trắc nghiệm tự động
+                </h3>
+                
+                <div class="flex gap-3 mb-6">
+                    <input type="text" id="aiTopic" placeholder="Nhập chủ đề (VD: Hàm số mũ, Phép chia đa thức...)" 
+                           class="flex-1 border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                    <button onclick="generateAI()" 
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-lg shadow transition flex items-center">
+                        Tạo ngay
+                    </button>
+                </div>
+                
+                <div id="aiResult" class="p-5 bg-gray-50 rounded-lg min-h-[150px] text-gray-700 whitespace-pre-wrap font-mono text-sm leading-relaxed border border-gray-200">
+                    Sẵn sàng tạo câu hỏi. Vui lòng nhập chủ đề phía trên...
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Lệnh điều hướng chuyển đổi giữa các Tab
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-link').forEach(el => {
+                el.classList.remove('bg-indigo-900', 'font-medium', 'shadow-inner');
+                el.classList.add('hover:bg-indigo-700');
+            });
+            const activeLink = document.querySelector(`[onclick="switchTab('${tabId}')"]`);
+            activeLink.classList.remove('hover:bg-indigo-700');
+            activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner');
+        }
+
+        // =========================================================
+        const GEMINI_API_KEY = 'AQ.Ab8RN6KWl68cJh-blZxfUmbdEm6x6UFx_Bbrf4-aNTucP_sEuw'; 
+        // =========================================================
+
+        async function generateAI() {
+            const topic = document.getElementById('aiTopic').value.trim();
+            const resultDiv = document.getElementById('aiResult');
+
+            if (!topic) {
+                resultDiv.innerHTML = '<span class="text-red-500">Vui lòng nhập chủ đề để AI có thể làm việc!</span>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<span class="text-indigo-600 flex items-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> AI đang soạn câu hỏi, thầy đợi một lát nhé...</span>';
+            
+            try {
+                // Đã cập nhật sang mô hình gemini-3.8-flash
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ 
+                            role: "user",
+                            parts: [{ 
+                                text: `Đóng vai một giáo viên chuyên môn, hãy tạo 1 câu hỏi trắc nghiệm gồm 4 đáp án A, B, C, D về chủ đề: "${topic}". Chỉ in ra nội dung câu hỏi và các đáp án, chỉ ra đáp án đúng, không cần giải thích dài dòng.` 
+                            }] 
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultDiv.innerHTML = `<span class="text-red-600">Lỗi từ máy chủ Google: ${data.error.message}</span>`;
+                } else if (data.candidates && data.candidates.length > 0) {
+                    resultDiv.textContent = data.candidates[0].content.parts[0].text;
+                } else {
+                    resultDiv.innerHTML = '<span class="text-orange-500">AI không trả về kết quả, thầy thử lại nhé.</span>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">Lỗi mạng hoặc API Key không hợp lệ: ${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
