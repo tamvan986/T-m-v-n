@@ -5,18 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Tổ Chuyên Môn - AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Tùy chỉnh thanh cuộn cho bảng ngang */
+        .table-container::-webkit-scrollbar { height: 8px; }
+        .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
 </head>
 <body class="bg-gray-50 font-sans h-screen flex">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-indigo-800 text-white flex flex-col shadow-lg">
+    <aside class="w-64 bg-indigo-800 text-white flex flex-col shadow-lg shrink-0">
         <div class="p-6 border-b border-indigo-700 text-center">
             <h1 class="text-xl font-bold tracking-wider">TỔ CHUYÊN MÔN</h1>
         </div>
         <nav class="flex-1 p-4 space-y-3">
-            <button onclick="switchTab('tongquan')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Tổng quan</button>
+            <button onclick="switchTab('tongquan')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition bg-indigo-900 font-medium shadow-inner">Tổng quan</button>
             <button onclick="switchTab('kehoach')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Kế hoạch</button>
-            <button onclick="switchTab('nganhang')" class="tab-link w-full text-left block px-4 py-2.5 bg-indigo-900 rounded font-medium shadow-inner">Ngân hàng câu hỏi</button>
+            <button onclick="switchTab('nganhang')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Ngân hàng câu hỏi</button>
         </nav>
     </aside>
 
@@ -24,13 +30,186 @@
     <main class="flex-1 p-8 overflow-y-auto">
         
         <!-- PHÂN HỆ: TỔNG QUAN -->
-        <div id="tongquan" class="tab-content hidden max-w-5xl mx-auto">
+        <div id="tongquan" class="tab-content max-w-[1200px] mx-auto">
             <header class="mb-8 border-b pb-4">
                 <h2 class="text-3xl font-bold text-gray-800">Tổng quan</h2>
-                <p class="text-gray-500 mt-2">Bảng điều khiển và thống kê dữ liệu chung của Tổ chuyên môn.</p>
+                <p class="text-gray-500 mt-2">Bảng điều khiển và danh sách nhân sự Tổ chuyên môn.</p>
             </header>
-            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-                <p class="text-gray-600">Giao diện thống kê báo cáo (Biểu đồ phổ điểm, tiến độ chương trình...) sẽ được tích hợp tại đây.</p>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-xl font-semibold mb-4 text-indigo-700 border-b pb-2">Danh sách thành viên Tổ chuyên môn (14 Giáo viên)</h3>
+                <div class="overflow-x-auto table-container pb-4">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700 text-sm">
+                                <th class="py-3 px-4 border border-gray-200 font-semibold text-center">STT</th>
+                                <th class="py-3 px-4 border border-gray-200 font-semibold">Họ và tên</th>
+                                <th class="py-3 px-4 border border-gray-200 font-semibold">SĐT</th>
+                                <th class="py-3 px-4 border border-gray-200 font-semibold text-center">Năm sinh</th>
+                                <th class="py-3 px-4 border border-gray-200 font-semibold">Trình độ đào tạo</th>
+                                <th class="py-3 px-4 border border-gray-200 font-semibold">Phân công giảng dạy</th>
+                                <th class="py-3 px-4 border border-gray-200 font-semibold text-center">Đảng viên</th>
+                                <th class="py-3 px-4 border border-gray-200 font-semibold">Kiêm nhiệm</th>
+                                <th class="py-3 px-4 border border-gray-200 font-semibold">Ghi Chú</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm text-gray-700">
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">1</td>
+                                <td class="py-2 px-4 border border-gray-200 font-bold text-indigo-700">Nguyễn Văn Tâm</td>
+                                <td class="py-2 px-4 border border-gray-200">0987023770</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">1986</td>
+                                <td class="py-2 px-4 border border-gray-200">Thạc sĩ Toán học</td>
+                                <td class="py-2 px-4 border border-gray-200">12A3, 12A6, 12A7</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
+                                <td class="py-2 px-4 border border-gray-200">TTCM+CN 12A3</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">2</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Quang Trãi</td>
+                                <td class="py-2 px-4 border border-gray-200">0916298272</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">1985</td>
+                                <td class="py-2 px-4 border border-gray-200">Toán - Tin học</td>
+                                <td class="py-2 px-4 border border-gray-200">12A8,12A9,11A5,11A6</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
+                                <td class="py-2 px-4 border border-gray-200">GVCN 12A8</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">3</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Phan Ngọc Trinh</td>
+                                <td class="py-2 px-4 border border-gray-200">0988251350</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">1988</td>
+                                <td class="py-2 px-4 border border-gray-200">Cử nhân SP Toán học</td>
+                                <td class="py-2 px-4 border border-gray-200">12A1, 12A2, 10A9, 10A10</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
+                                <td class="py-2 px-4 border border-gray-200">GVCN 12A1</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">4</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Phạm Phùng Khánh Tú</td>
+                                <td class="py-2 px-4 border border-gray-200">0977738408</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">1992</td>
+                                <td class="py-2 px-4 border border-gray-200">Thạc sĩ Toán học</td>
+                                <td class="py-2 px-4 border border-gray-200">10A7, 10A8, 12A4, 12A5</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
+                                <td class="py-2 px-4 border border-gray-200">GVCN 12A4</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">5</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Cao Thị Thu</td>
+                                <td class="py-2 px-4 border border-gray-200">0989963183</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">1993</td>
+                                <td class="py-2 px-4 border border-gray-200">Cử nhân SP Toán học</td>
+                                <td class="py-2 px-4 border border-gray-200">10A1, 12A10, 12A11</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
+                                <td class="py-2 px-4 border border-gray-200">CN 10A1</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">6</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Thị Huyền Trân</td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200 text-center"></td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200 text-orange-600 font-medium">Nghỉ hậu sản</td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">7</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Đặng Kim Thoa</td>
+                                <td class="py-2 px-4 border border-gray-200">0966469202</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">2001</td>
+                                <td class="py-2 px-4 border border-gray-200">Cử nhân SP Toán học</td>
+                                <td class="py-2 px-4 border border-gray-200">10A2, 10A3, 11A1, 11A2</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
+                                <td class="py-2 px-4 border border-gray-200">CN 11A1</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">8</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Trung Hậu</td>
+                                <td class="py-2 px-4 border border-gray-200">0338163672</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">2003</td>
+                                <td class="py-2 px-4 border border-gray-200">Cử nhân SP Toán học</td>
+                                <td class="py-2 px-4 border border-gray-200">10A4, 10A5, 11A7, 11A8</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
+                                <td class="py-2 px-4 border border-gray-200">CN 11A8</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">9</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Nguyễn Bảo Ngưng</td>
+                                <td class="py-2 px-4 border border-gray-200">0834988133</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">1985</td>
+                                <td class="py-2 px-4 border border-gray-200 whitespace-normal min-w-[200px]">Kĩ sư Tin học-CC NVSP bậc 2</td>
+                                <td class="py-2 px-4 border border-gray-200">10A6,7,8,9-12A8,9</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
+                                <td class="py-2 px-4 border border-gray-200 text-indigo-700 font-medium">Tổ phó CM + CNTT + PM</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">10</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Lê Thị Thanh Tuyền</td>
+                                <td class="py-2 px-4 border border-gray-200">0366699470</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">1990</td>
+                                <td class="py-2 px-4 border border-gray-200">Kĩ sư CNTT</td>
+                                <td class="py-2 px-4 border border-gray-200">11A7,8-12A10,11</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">X</td>
+                                <td class="py-2 px-4 border border-gray-200">CN 12A10</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">11</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Trần Thị Thảo</td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200 text-center"></td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">12</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Nguyễn Mạnh Tiến</td>
+                                <td class="py-2 px-4 border border-gray-200">0372818288</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">1999</td>
+                                <td class="py-2 px-4 border border-gray-200">Thạc sĩ Vật lý</td>
+                                <td class="py-2 px-4 border border-gray-200 whitespace-normal min-w-[200px]">10A3, 10A4, 10A5 - 11A1, 11A2, 11A3, 11A7, 11A8</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">13</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Nguyễn Hoàng Phương</td>
+                                <td class="py-2 px-4 border border-gray-200"></td>
+                                <td class="py-2 px-4 border border-gray-200 text-center"></td>
+                                <td class="py-2 px-4 border border-gray-200">Kỹ sư Điện - Điện tử</td>
+                                <td class="py-2 px-4 border border-gray-200">Phụ trách theo dõi các lớp nghề</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold">x</td>
+                                <td class="py-2 px-4 border border-gray-200">CN lớp TC CNKT ô tô</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                            <tr class="hover:bg-indigo-50 transition">
+                                <td class="py-2 px-4 border border-gray-200 text-center">14</td>
+                                <td class="py-2 px-4 border border-gray-200 font-medium text-gray-900">Hồ Minh Khương</td>
+                                <td class="py-2 px-4 border border-gray-200">0977675850</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center">1985</td>
+                                <td class="py-2 px-4 border border-gray-200">Cử nhân cao đẳng cơ khí</td>
+                                <td class="py-2 px-4 border border-gray-200">Lớp nghề</td>
+                                <td class="py-2 px-4 border border-gray-200 text-center text-green-600 font-bold"></td>
+                                <td class="py-2 px-4 border border-gray-200">Chủ nhiệm lớp cơ khí</td>
+                                <td class="py-2 px-4 border border-gray-200 text-gray-500"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -46,7 +225,7 @@
         </div>
 
         <!-- PHÂN HỆ: NGÂN HÀNG CÂU HỎI & AI -->
-        <div id="nganhang" class="tab-content max-w-3xl mx-auto">
+        <div id="nganhang" class="tab-content hidden max-w-3xl mx-auto">
             <header class="mb-8 border-b pb-4">
                 <h2 class="text-3xl font-bold text-gray-800">Ngân hàng câu hỏi & AI</h2>
                 <p class="text-gray-500 mt-2">Hỗ trợ tự động tạo đề kiểm tra trắc nghiệm bằng Trợ lý AI.</p>
@@ -106,7 +285,6 @@
             resultDiv.innerHTML = '<span class="text-indigo-600 flex items-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> AI đang soạn câu hỏi, thầy đợi một lát nhé...</span>';
             
             try {
-                // Đã cập nhật sang mô hình gemini-3.8-flash
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
                 
                 const response = await fetch(url, {
