@@ -466,25 +466,7 @@
     <script>
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
         
-        // ================= KẾT NỐI GEMINI API & CHUYỂN TAB =================
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(tabId).classList.remove('hidden');
-            document.querySelectorAll('.tab-link').forEach(el => {
-                el.classList.remove('bg-indigo-900', 'font-medium', 'shadow-inner', 'border-l-4', 'border-green-400');
-                el.classList.add('hover:bg-indigo-700');
-            });
-            const activeLink = document.querySelector(`[onclick="switchTab('${tabId}')"]`);
-            activeLink.classList.remove('hover:bg-indigo-700');
-            
-            // Xử lý active state riêng cho tab Cây Hạnh Phúc để có màu xanh lá
-            if(tabId === 'cayhanhphuc') {
-                activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner', 'border-l-4', 'border-green-400');
-            } else {
-                activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner');
-            }
-        }
-
+       
         // ================= HỆ SINH THÁI CÂY HẠNH PHÚC =================
         // Dữ liệu mô phỏng dựa trên danh sách lớp 12A3
         let hpData = [
