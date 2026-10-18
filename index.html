@@ -413,7 +413,167 @@
             switchTab('tongquan'); 
             renderPlan();
         };
+<!-- PHÂN HỆ MỚI: CÂY HẠNH PHÚC -->
+        <div id="cayhanhphuc" class="tab-content hidden max-w-[1200px] mx-auto">
+            <header class="mb-8 border-b pb-4 flex justify-between items-end">
+                <div>
+                    <h2 class="text-3xl font-bold text-green-700">Hệ Sinh Thái "Cây Hạnh Phúc"</h2>
+                    <p class="text-gray-500 mt-2">Cơ chế quản trị động lực: 5 Điểm tích lũy (Happy Points) = Tự động quy đổi 1 Tick.</p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg border border-green-200 text-sm font-medium text-green-800 shadow-sm">
+                    <p>🌱 1 Tick: Hạt mầm &nbsp;|&nbsp; 🌿 2 Tick: Mầm xanh &nbsp;|&nbsp; 🍃 3 Tick: Chồi non</p>
+                    <p class="mt-1">🍀 4 Tick: Lá &nbsp;|&nbsp; 🌸 5 Tick: Hoa &nbsp;|&nbsp; 🍎 6 Tick: Trái</p>
+                </div>
+            </header>
 
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-700">Bảng Theo Dõi Tiến Độ Học Viên (Lớp 12A3)</h3>
+                    <button onclick="moPhongCongDiem()" class="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded shadow transition text-sm">
+                        + Mô phỏng cộng 5 điểm cho toàn lớp
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto table-container">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-700 text-sm border-b border-t border-gray-200">
+                                <th class="py-3 px-4 font-semibold w-12 text-center">STT</th>
+                                <th class="py-3 px-4 font-semibold w-48">Họ và Tên</th>
+                                <th class="py-3 px-4 font-semibold w-24 text-center">Điểm (HP)</th>
+                                <th class="py-3 px-4 font-semibold text-center">Hành Trình Tích Lũy (Ô 1-6)</th>
+                                <th class="py-3 px-4 font-semibold w-32 text-center">Trạng Thái Cây</th>
+                                <th class="py-3 px-4 font-semibold w-48 text-center">Tiến Độ</th>
+                                <th class="py-3 px-4 font-semibold w-32 text-center">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hp-tbody" class="text-sm text-gray-700">
+                            <!-- Dữ liệu render bằng JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        
+        // ================= KẾT NỐI GEMINI API & CHUYỂN TAB =================
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            document.querySelectorAll('.tab-link').forEach(el => {
+                el.classList.remove('bg-indigo-900', 'font-medium', 'shadow-inner', 'border-l-4', 'border-green-400');
+                el.classList.add('hover:bg-indigo-700');
+            });
+            const activeLink = document.querySelector(`[onclick="switchTab('${tabId}')"]`);
+            activeLink.classList.remove('hover:bg-indigo-700');
+            
+            // Xử lý active state riêng cho tab Cây Hạnh Phúc để có màu xanh lá
+            if(tabId === 'cayhanhphuc') {
+                activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner', 'border-l-4', 'border-green-400');
+            } else {
+                activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner');
+            }
+        }
+
+        // ================= HỆ SINH THÁI CÂY HẠNH PHÚC =================
+        // Dữ liệu mô phỏng dựa trên danh sách lớp 12A3
+        let hpData = [
+            { id: 1, name: "Võ Thị Kiều Thơ", points: 4 },     // Chưa đủ 5đ -> 0 tick
+            { id: 2, name: "Lê Bảo Phương Anh", points: 30 }, // 30đ -> 6 tick (Trái)
+            { id: 3, name: "Nguyễn Thế Vinh", points: 26 },   // 26đ -> 5 tick (Hoa)
+            { id: 4, name: "Đặng Thị Thúy Nga", points: 20 }, // 20đ -> 4 tick (Lá)
+            { id: 5, name: "Nguyễn Ngọc Thảo Như", points: 35 }, // Vượt 30đ -> Max 6 tick
+            { id: 6, name: "Phan Thanh Hiếu", points: 15 },   // 15đ -> 3 tick (Chồi non)
+            { id: 7, name: "Lê Nhật Duy", points: 10 }        // 10đ -> 2 tick (Mầm xanh)
+        ];
+
+        // Hàm tính toán tự động: Điểm -> Tick -> Trạng thái
+        function tinhToanCayHanhPhuc(points) {
+            let ticks = Math.floor(points / 5);
+            if (ticks > 6) ticks = 6; // Tối đa 6 ô tương ứng 6 giai đoạn
+
+            let levelName = "Chưa nảy mầm";
+            let levelClass = "hp-lvl-0";
+            
+            if(ticks === 1) { levelName = "Hạt mầm"; levelClass = "hp-lvl-1"; }
+            else if(ticks === 2) { levelName = "Mầm xanh"; levelClass = "hp-lvl-2"; }
+            else if(ticks === 3) { levelName = "Chồi non"; levelClass = "hp-lvl-3"; }
+            else if(ticks === 4) { levelName = "Lá"; levelClass = "hp-lvl-4"; }
+            else if(ticks === 5) { levelName = "Hoa"; levelClass = "hp-lvl-5"; }
+            else if(ticks === 6) { levelName = "Trái"; levelClass = "hp-lvl-6"; }
+
+            let progress = Math.round((ticks / 6) * 100);
+
+            return { ticks, levelName, levelClass, progress };
+        }
+
+        // Hàm render dữ liệu ra bảng
+        function renderCayHanhPhuc() {
+            const tbody = document.getElementById('hp-tbody');
+            tbody.innerHTML = '';
+
+            hpData.forEach((student, index) => {
+                const status = tinhToanCayHanhPhuc(student.points);
+                
+                // Tạo giao diện 6 ô Tick
+                let ticksHTML = '';
+                for(let i = 1; i <= 6; i++) {
+                    if(i <= status.ticks) {
+                        ticksHTML += `<span class="tick-box tick-on mx-1">✓</span>`;
+                    } else {
+                        ticksHTML += `<span class="tick-box tick-off mx-1"></span>`;
+                    }
+                }
+
+                // Giao diện Thanh tiến độ
+                let progressHTML = `
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+                        <div class="bg-green-600 h-2.5 rounded-full transition-all duration-500" style="width: ${status.progress}%"></div>
+                    </div>
+                    <span class="text-xs text-gray-500 mt-1 inline-block">${status.progress}% Hoàn thành</span>
+                `;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-green-50 transition border-b border-gray-100">
+                        <td class="py-3 px-4 text-center font-medium">${index + 1}</td>
+                        <td class="py-3 px-4 font-bold text-gray-800">${student.name}</td>
+                        <td class="py-3 px-4 text-center text-lg font-bold text-indigo-600">${student.points}</td>
+                        <td class="py-3 px-4 text-center">${ticksHTML}</td>
+                        <td class="py-3 px-4 text-center"><span class="hp-badge ${status.levelClass}">${status.levelName}</span></td>
+                        <td class="py-3 px-4">${progressHTML}</td>
+                        <td class="py-3 px-4 text-center">
+                            <button onclick="congDiemCaNhan(${student.id}, 5)" class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-200 border border-indigo-200 font-bold">+5 HP</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Hàm xử lý cộng điểm
+        function congDiemCaNhan(id, pointToAdd) {
+            const student = hpData.find(s => s.id === id);
+            if(student) {
+                student.points += pointToAdd;
+                renderCayHanhPhuc();
+            }
+        }
+
+        function moPhongCongDiem() {
+            hpData.forEach(student => {
+                student.points += 5;
+            });
+            renderCayHanhPhuc();
+        }
+
+        // Khởi tạo chạy lần đầu
+        window.onload = () => {
+            switchTab('cayhanhphuc'); // Đặt Cây Hạnh Phúc làm tab mặc định để thầy dễ xem
+            renderCayHanhPhuc();
+        };
         // ================= XỬ LÝ AI PHÂN LUỒNG HỌC VIÊN =================
         let csvData = [];
 
