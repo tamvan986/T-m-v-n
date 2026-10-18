@@ -285,18 +285,24 @@
         const GEMINI_API_KEY = 'AQ.Ab8RN6KP-6503i16ACf3eyY-TgUYxBicUuCTdL1FGoYeDt2APw'; 
         const API_RENDER_URL = 'https://api-toan-tin-congnghe.onrender.com/api/phan-luong'; 
 
-        // ================= KẾT NỐI GEMINI API & CHUYỂN TAB =================
+       // ================= XỬ LÝ CHUYỂN TAB =================
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
             document.querySelectorAll('.tab-link').forEach(el => {
-                el.classList.remove('bg-indigo-900', 'font-medium', 'shadow-inner');
+                el.classList.remove('bg-indigo-900', 'font-medium', 'shadow-inner', 'border-l-4', 'border-yellow-400');
                 el.classList.add('hover:bg-indigo-700');
             });
             const activeLink = document.querySelector(`[onclick="switchTab('${tabId}')"]`);
             activeLink.classList.remove('hover:bg-indigo-700');
-            activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner');
+            activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner', 'border-l-4', 'border-yellow-400');
         }
+
+        // Khởi tạo tab mặc định
+        window.onload = () => {
+            switchTab('tongquan');
+            renderPlan();
+        };
 
         // ================= DB KẾ HOẠCH GIÁO DỤC =================
         const planData = [
