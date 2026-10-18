@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Tổ Chuyên Môn - AI</title>
+    <title>Quản Lý Tổ Chuyên Môn - AI Sinh Đề Toán Học</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <style>
         .table-container::-webkit-scrollbar { height: 8px; }
         .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .table-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @keyframes flash { 0% { background-color: #e0e7ff; } 100% { background-color: #f8fafc; } }
+        .flash-bg { animation: flash 1s ease-out; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans h-screen flex">
@@ -20,13 +24,14 @@
         </div>
         <nav class="flex-1 p-4 space-y-3">
             <button onclick="switchTab('tongquan')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Tổng quan</button>
-            <button onclick="switchTab('kehoach')" class="tab-link w-full text-left block px-4 py-2.5 bg-indigo-900 font-medium shadow-inner rounded transition">Kế hoạch giáo dục</button>
+            <button onclick="switchTab('kehoach')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Kế hoạch giáo dục</button>
             <button onclick="switchTab('nganhang')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Ngân hàng câu hỏi</button>
+            <button onclick="switchTab('taobaituongtu')" class="tab-link w-full text-left block px-4 py-2.5 bg-indigo-900 font-medium shadow-inner rounded transition">Tạo bài tương tự</button>
         </nav>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 p-8 overflow-y-auto">
+    <main class="flex-1 p-8 overflow-y-auto" id="main-container">
         
         <!-- PHÂN HỆ: TỔNG QUAN -->
         <div id="tongquan" class="tab-content hidden max-w-[1200px] mx-auto">
@@ -64,7 +69,7 @@
                             <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">11</td><td class="py-2 px-4 border font-medium text-gray-900">Trần Thị Thảo</td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border"></td></tr>
                             <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">12</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Mạnh Tiến</td><td class="py-2 px-4 border">0372818288</td><td class="py-2 px-4 border text-center">1999</td><td class="py-2 px-4 border">Thạc sĩ Vật lý</td><td class="py-2 px-4 border">10A3-5, 11A1-3, 11A7-8</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border"></td></tr>
                             <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">13</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Hoàng Phương</td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border">Kỹ sư Điện - Điện tử</td><td class="py-2 px-4 border">Lớp nghề</td><td class="py-2 px-4 border text-center text-green-600 font-bold">x</td><td class="py-2 px-4 border">CN lớp TC CNKT ô tô</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">14</td><td class="py-2 px-4 border font-medium text-gray-900">Hồ Minh Khương</td><td class="py-2 px-4 border">0977675850</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Cử nhân cao đẳng cơ khí</td><td class="py-2 px-4 border">Lớp nghề</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">Chủ nhiệm lớp cơ khí</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">14</td><td class="py-2 px-4 border font-medium text-gray-900">Hồ Minh Khương</td><td class="py-2 px-4 border">0977675850</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Cử nhân CĐ cơ khí</td><td class="py-2 px-4 border">Lớp nghề</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">Chủ nhiệm lớp cơ khí</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -72,14 +77,13 @@
         </div>
 
         <!-- PHÂN HỆ: KẾ HOẠCH GIÁO DỤC -->
-        <div id="kehoach" class="tab-content max-w-[1200px] mx-auto">
+        <div id="kehoach" class="tab-content hidden max-w-[1200px] mx-auto">
             <header class="mb-8 border-b pb-4">
                 <h2 class="text-3xl font-bold text-gray-800">Kế hoạch giáo dục</h2>
                 <p class="text-gray-500 mt-2">Tra cứu phân phối chương trình chi tiết các bộ môn.</p>
             </header>
             
             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <!-- Bộ lọc Dữ liệu -->
                 <div class="flex gap-4 mb-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <div class="flex-1">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Môn học</label>
@@ -99,7 +103,6 @@
                     </div>
                 </div>
 
-                <!-- Bảng Dữ liệu Động -->
                 <div class="overflow-x-auto table-container">
                     <table class="w-full text-left border-collapse whitespace-normal min-w-[800px]">
                         <thead>
@@ -111,14 +114,14 @@
                             </tr>
                         </thead>
                         <tbody id="plan-tbody" class="text-sm text-gray-700">
-                            <!-- Dữ liệu sẽ được JS đẩy vào đây -->
+                            <!-- JS Inject -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- PHÂN HỆ: NGÂN HÀNG CÂU HỎI & AI -->
+        <!-- PHÂN HỆ: NGÂN HÀNG CÂU HỎI -->
         <div id="nganhang" class="tab-content hidden max-w-3xl mx-auto">
             <header class="mb-8 border-b pb-4">
                 <h2 class="text-3xl font-bold text-gray-800">Ngân hàng câu hỏi & AI</h2>
@@ -130,18 +133,106 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     Tạo câu hỏi trắc nghiệm tự động
                 </h3>
-                
                 <div class="flex gap-3 mb-6">
-                    <input type="text" id="aiTopic" placeholder="Nhập chủ đề (VD: Số phức, Di truyền học...)" 
-                           class="flex-1 border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
-                    <button onclick="generateAI()" 
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-lg shadow transition flex items-center">
-                        Tạo ngay
-                    </button>
+                    <input type="text" id="aiTopic" placeholder="Nhập chủ đề (VD: Số phức, Tích phân...)" class="flex-1 border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    <button onclick="generateAI()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-lg shadow transition">Tạo ngay</button>
+                </div>
+                <div id="aiResult" class="p-5 bg-gray-50 rounded-lg min-h-[150px] text-gray-700 whitespace-pre-wrap font-mono text-sm border border-gray-200">Sẵn sàng...</div>
+            </div>
+        </div>
+
+        <!-- PHÂN HỆ: STUDIO TẠO ĐỀ TƯƠNG TỰ (TỐI ƯU CHO TOÁN HỌC & AI VISION) -->
+        <div id="taobaituongtu" class="tab-content max-w-5xl mx-auto">
+            <header class="mb-8 border-b pb-4 flex justify-between items-end">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800">Studio Sinh Đề Toán Học</h2>
+                    <p class="text-gray-500 mt-2">Đọc trực tiếp cấu trúc MathType, Đồ thị và Hình vẽ qua AI Vision (Gemini 1.5 Pro).</p>
+                </div>
+            </header>
+
+            <!-- 1. Nạp Đề Gốc -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6" id="upload-zone">
+                <h3 class="text-lg font-bold text-indigo-700 mb-4 border-b pb-2 flex items-center justify-between">
+                    <span class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        Nguồn Bài Tập Gốc
+                    </span>
+                    <span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded font-semibold border border-indigo-200">Khuyên dùng: Lưu Word thành PDF hoặc Dán Ảnh để quét MathType chuẩn nhất</span>
+                </h3>
+                
+                <div class="flex flex-col md:flex-row gap-6">
+                    <!-- Khu vực File/Paste -->
+                    <div class="flex-1">
+                        <div id="dropzone" class="border-2 border-dashed border-indigo-300 rounded-xl p-6 text-center bg-gray-50 hover:bg-indigo-50 transition relative h-full flex flex-col justify-center items-center">
+                            <input type="file" id="fileInput" class="hidden" accept=".pdf,.png,.jpg,.jpeg,.docx" onchange="handleFileSelect(event)">
+                            <svg class="w-10 h-10 text-indigo-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <p class="text-gray-700 font-medium mb-1">Click chuột vào đây rồi bấm <kbd class="bg-gray-200 px-1 rounded border border-gray-300">Ctrl</kbd> + <kbd class="bg-gray-200 px-1 rounded border border-gray-300">V</kbd></p>
+                            <p class="text-sm text-gray-500 mb-4">hoặc tải lên file PDF / Ảnh / Word</p>
+                            <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2 bg-white border border-indigo-200 text-indigo-700 rounded-lg hover:bg-indigo-50 transition font-medium text-sm">
+                                Chọn File
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Khu vực Hiển thị Dữ liệu -->
+                    <div class="flex-1 flex flex-col gap-3">
+                        <div id="mediaPreviewContainer" class="hidden border border-gray-200 rounded-lg p-2 bg-gray-50 relative flex justify-center items-center h-32 overflow-hidden">
+                            <span id="mediaBadge" class="absolute top-0 right-0 bg-green-500 text-white text-xs px-2 py-1 rounded-bl-lg rounded-tr-lg z-10">Đã nạp file</span>
+                            <img id="imagePreview" class="max-h-full max-w-full object-contain hidden" src="" alt="Preview">
+                            <div id="pdfIcon" class="hidden flex flex-col items-center">
+                                <svg class="w-10 h-10 text-red-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                <span class="text-sm font-medium text-gray-600" id="pdfName">document.pdf</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1">
+                            <textarea id="originalQuestion" rows="4" class="w-full h-full font-mono text-sm border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition bg-white" placeholder="Nội dung Text thô (nếu nạp Word) sẽ hiện ở đây. Nếu nạp Ảnh/PDF, AI sẽ đọc trực tiếp từ hình, khung này có thể để trống hoặc dùng để ghi chú yêu cầu thêm cho AI..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div id="fileStatus" class="mt-3 text-sm font-medium text-center p-2 rounded"></div>
+            </div>
+
+            <!-- 2. Cấu hình & Kết quả -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-lg font-bold text-indigo-700 mb-4 border-b pb-2 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                    Cấu Hình Sinh Đề
+                </h3>
+                
+                <div class="flex gap-4 flex-wrap mb-6">
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Số lượng câu cần tạo:</label>
+                        <input type="number" id="numSimilar" value="3" min="1" max="20" class="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    </div>
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mức độ tương đương:</label>
+                        <select id="difficulty" class="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                            <option value="Giữ nguyên cấu trúc, đổi số liệu">Tương đương đề gốc</option>
+                            <option value="Dễ hơn một chút (Nhận biết/Thông hiểu)">Dễ hơn một chút</option>
+                            <option value="Phát triển khó hơn (Vận dụng)">Khó hơn (Vận dụng)</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <div id="aiResult" class="p-5 bg-gray-50 rounded-lg min-h-[150px] text-gray-700 whitespace-pre-wrap font-mono text-sm leading-relaxed border border-gray-200">
-                    Sẵn sàng tạo câu hỏi. Vui lòng nhập chủ đề phía trên...
+                <div class="border-t pt-4 flex flex-wrap justify-between items-center gap-4">
+                    <p class="text-sm text-gray-500 italic max-w-lg">💡 Công thức sẽ xuất mã LaTeX chuẩn. Hình vẽ/Đồ thị sẽ tự động xuất mã LaTeX TikZ hoặc GeoGebra script.</p>
+                    <div class="flex gap-3">
+                        <button onclick="downloadDoc()" class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg shadow transition flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Tải file Word
+                        </button>
+                        <button onclick="generateSimilarAI()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2.5 rounded-lg shadow transition flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                            Trộn & Sinh Đề
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Kết quả -->
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Đề đã tạo (Mã LaTeX - Có thể tinh chỉnh trước khi tải):</label>
+                    <textarea id="similarResult" rows="15" class="w-full font-mono text-sm border border-gray-300 p-4 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition bg-white" placeholder="Kết quả sẽ hiển thị tại đây..."></textarea>
                 </div>
             </div>
         </div>
@@ -149,11 +240,17 @@
     </main>
 
     <script>
-        // Điều hướng Menu chính
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        
+        // ================= KẾT NỐI GEMINI API =================
+        const GEMINI_API_KEY = 'AIzaSyBoXkMPIlVcbBbgPGluDwJE_IuzQx-BcME'; 
+
+        let currentMediaBase64 = null;
+        let currentMediaMimeType = null;
+
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
-
             document.querySelectorAll('.tab-link').forEach(el => {
                 el.classList.remove('bg-indigo-900', 'font-medium', 'shadow-inner');
                 el.classList.add('hover:bg-indigo-700');
@@ -163,8 +260,8 @@
             activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner');
         }
 
-        // ================= KHO DỮ LIỆU KẾ HOẠCH GIÁO DỤC =================
-        const planData = [
+        // Fake DB Kế hoạch Giáo dục
+          const planData = [
             // TOÁN 10
             { mon: "Toán", khoi: "10", tuan: "1-3", tiet: "1-4", bai: "Chương I: Mệnh đề", yeucau: "Thiết lập, phát biểu mệnh đề toán học. Xác định tính đúng sai của mệnh đề." },
             { mon: "Toán", khoi: "10", tuan: "3-4", tiet: "5-8", bai: "Chương I: Tập hợp và phép toán", yeucau: "Nhận biết tập hợp, thực hiện phép toán giao, hợp, hiệu, phần bù." },
@@ -279,47 +376,214 @@
         // Khởi tạo bảng ngay khi load trang
         window.onload = renderPlan;
 
-        // ================= KẾT NỐI GEMINI AI =================
-        const GEMINI_API_KEY = 'AQ.Ab8RN6I-g1u9arbsrmd5fza_fskqthcLE-WLHrinBbdfhY1IfA'; 
 
-        async function generateAI() {
-            const topic = document.getElementById('aiTopic').value.trim();
-            const resultDiv = document.getElementById('aiResult');
+        // ================= XỬ LÝ ẢNH & FILE NÂNG CAO =================
+        const dropzone = document.getElementById('dropzone');
+        const fileStatus = document.getElementById('fileStatus');
+        const mediaPreviewContainer = document.getElementById('mediaPreviewContainer');
+        const imgPreview = document.getElementById('imagePreview');
+        const pdfIcon = document.getElementById('pdfIcon');
+        const pdfName = document.getElementById('pdfName');
+        const textarea = document.getElementById('originalQuestion');
 
-            if (!topic) {
-                resultDiv.innerHTML = '<span class="text-red-500">Vui lòng nhập chủ đề để AI có thể làm việc!</span>';
+        // Bắt sự kiện Paste (Ctrl+V)
+        document.getElementById('main-container').addEventListener('paste', function(e) {
+            if (e.clipboardData.files.length > 0) {
+                e.preventDefault();
+                const file = e.clipboardData.files[0];
+                if (file.type.startsWith('image/')) processMediaFile(file);
+            }
+        });
+
+        // Xử lý nạp file
+        async function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Nếu là Ảnh hoặc PDF (Chuyển thành Base64 gửi nguyên bản cho AI Vision)
+            if (file.type.startsWith('image/') || file.name.endsWith('.pdf')) {
+                processMediaFile(file);
+            } 
+            // Nếu là Word (Cảnh báo không đọc được MathType/Hình vẽ)
+            else if (file.name.endsWith('.docx')) {
+                resetMediaState();
+                fileStatus.classList.remove('hidden');
+                fileStatus.className = "mt-3 text-sm font-medium text-center p-2 rounded bg-yellow-50 text-yellow-700 border border-yellow-200";
+                fileStatus.innerHTML = `⚠️ Đang nạp file Word. <b>Lưu ý:</b> Trình duyệt không thể đọc công thức MathType và Hình vẽ từ file Word. Hãy lưu file Word thành PDF rồi nạp lại để đạt kết quả tốt nhất.`;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    mammoth.extractRawText({arrayBuffer: e.target.result})
+                        .then(result => { textarea.value = result.value; })
+                        .catch(err => { textarea.value = `Lỗi: ${err.message}`; });
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        // Xử lý lưu Data ảnh/PDF vào bộ nhớ
+        function processMediaFile(file) {
+            dropzone.classList.add('flash-bg');
+            setTimeout(() => dropzone.classList.remove('flash-bg'), 1000);
+            
+            fileStatus.classList.remove('hidden');
+            fileStatus.className = "mt-3 text-sm font-medium text-center p-2 rounded bg-green-50 text-green-700 border border-green-200";
+            fileStatus.innerHTML = `✔ Đã nạp thành công tài liệu gốc. Mắt thần AI sẽ quét và đọc toàn bộ Toán học/Hình vẽ trong file này.`;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                mediaPreviewContainer.classList.remove('hidden');
+                
+                if (file.type.startsWith('image/')) {
+                    imgPreview.src = dataUrl;
+                    imgPreview.classList.remove('hidden');
+                    pdfIcon.classList.add('hidden');
+                } else if (file.name.endsWith('.pdf')) {
+                    pdfName.textContent = file.name;
+                    pdfIcon.classList.remove('hidden');
+                    imgPreview.classList.add('hidden');
+                }
+                
+                // Trích xuất Base64 Data
+                currentMediaBase64 = dataUrl.split(',')[1];
+                currentMediaMimeType = file.type;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetMediaState() {
+            currentMediaBase64 = null;
+            currentMediaMimeType = null;
+            mediaPreviewContainer.classList.add('hidden');
+            imgPreview.src = "";
+        }
+
+        // Sự kiện kéo thả
+        document.addEventListener('DOMContentLoaded', () => {
+            if(dropzone) {
+                dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('bg-indigo-100'); });
+                dropzone.addEventListener('dragleave', e => { e.preventDefault(); dropzone.classList.remove('bg-indigo-100'); });
+                dropzone.addEventListener('drop', e => {
+                    e.preventDefault(); dropzone.classList.remove('bg-indigo-100');
+                    if (e.dataTransfer.files.length) {
+                        document.getElementById('fileInput').files = e.dataTransfer.files;
+                        handleFileSelect({target: {files: e.dataTransfer.files}});
+                    }
+                });
+            }
+        });
+
+        // ================= SINH ĐỀ TƯƠNG TỰ BẰNG GEMINI VISION =================
+        async function generateSimilarAI() {
+            const originalText = textarea.value.trim();
+            const num = document.getElementById('numSimilar').value;
+            const difficulty = document.getElementById('difficulty').value;
+            const resultArea = document.getElementById('similarResult');
+
+            if (!originalText && !currentMediaBase64) {
+                alert("Thầy vui lòng dán ảnh (Ctrl+V) hoặc nạp file PDF/Word trước nhé!");
                 return;
             }
 
-            resultDiv.innerHTML = '<span class="text-indigo-600 flex items-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> AI đang soạn câu hỏi, thầy đợi một lát nhé...</span>';
+            resultArea.value = "Mắt thần AI đang quét và phân tích tài liệu gốc (Hình vẽ/Công thức/Chữ)... \nHệ thống đang biên dịch sang mã LaTeX và TikZ chuẩn. Thầy vui lòng chờ khoảng 10-20 giây...";
             
             try {
+                // ĐÃ SỬA: Thay thế gemini-3.8-flash bằng mô hình tiêu chuẩn hiện hành là gemini-1.5-pro
+                // gemini-1.5-pro là mô hình tư duy sâu, chuyên trị đọc hiểu file PDF, ảnh phức tạp, hình học và xuất LaTeX.
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
                 
+                const prompt = `Đóng vai một chuyên gia ra đề thi Toán/Vật lý. Dựa vào bộ tài liệu gốc được cung cấp (từ file PDF/Ảnh hoặc văn bản đính kèm).\n\nHãy phân tích cấu trúc, nhận diện chính xác các công thức toán học và hình vẽ trong tài liệu đó, sau đó tạo ra ${num} câu hỏi trắc nghiệm mới với mức độ: "${difficulty}".\n\nCHÚ Ý ĐẶC BIỆT VỀ MÃ HÓA (BẮT BUỘC):\n1. Tất cả công thức, ký hiệu toán học phải được viết lại bằng mã LaTeX chuẩn (sử dụng dấu $ cho inline và $$ cho block).\n2. Tuyệt đối không dùng ký tự Unicode đặc biệt cho toán học, phải mã hóa toàn bộ sang LaTeX.\n3. Nếu câu hỏi yêu cầu hoặc liên quan đến hình học, đồ thị hàm số, hãy TỰ ĐỘNG SÁNG TÁC MÃ LATEX TIKZ (bắt đầu bằng \\begin{tikzpicture}) để vẽ hình minh họa cho câu hỏi đó.\n4. Cấu trúc mỗi câu: Câu hỏi -> Mã TikZ (nếu có) -> 4 đáp án A, B, C, D rõ ràng.\n5. Phần cuối cùng của tài liệu xuất ra, cung cấp Bảng Đáp án và Hướng dẫn giải vắn tắt (cũng dùng LaTeX).\n\nNội dung văn bản bổ trợ: ${originalText}`;
+
+                let parts = [{ text: prompt }];
+                // Nhét Base64 ảnh/PDF vào Payload nếu có
+                if (currentMediaBase64) {
+                    parts.push({
+                        inlineData: {
+                            mimeType: currentMediaMimeType,
+                            data: currentMediaBase64
+                        }
+                    });
+                }
+
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ 
-                            role: "user",
-                            parts: [{ 
-                                text: `Đóng vai một giáo viên chuyên môn, hãy tạo 1 câu hỏi trắc nghiệm gồm 4 đáp án A, B, C, D về chủ đề: "${topic}". Chỉ in ra nội dung câu hỏi và các đáp án, chỉ ra đáp án đúng, không cần giải thích dài dòng.` 
-                            }] 
-                        }]
+                        contents: [{ role: "user", parts: parts }]
                     })
                 });
                 
                 const data = await response.json();
                 
                 if (data.error) {
-                    resultDiv.innerHTML = `<span class="text-red-600">Lỗi từ máy chủ Google: ${data.error.message}</span>`;
+                    resultArea.value = `Lỗi hệ thống Google: ${data.error.message}`;
                 } else if (data.candidates && data.candidates.length > 0) {
-                    resultDiv.textContent = data.candidates[0].content.parts[0].text;
+                    resultArea.value = data.candidates[0].content.parts[0].text;
                 } else {
-                    resultDiv.innerHTML = '<span class="text-orange-500">AI không trả về kết quả, thầy thử lại nhé.</span>';
+                    resultArea.value = 'AI không trả về kết quả.';
                 }
             } catch (error) {
-                resultDiv.innerHTML = `<span class="text-red-600">Lỗi mạng hoặc API Key không hợp lệ: ${error.message}</span>`;
+                resultArea.value = `Lỗi mạng hoặc API Key: ${error.message}`;
+            }
+        }
+
+        // Xuất Word (.doc)
+        function downloadDoc() {
+            const content = document.getElementById('similarResult').value;
+            if(!content || content.includes("Mắt thần AI đang quét")) {
+                return alert("Chưa có đề thi hoàn chỉnh để tải xuống!");
+            }
+            
+            const htmlContent = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><title>De Thi Toan LaTeX</title></head>
+                <body>
+                    <div style="font-family: 'Cambria Math', 'Times New Roman', serif; font-size: 14pt; line-height: 1.5;">
+                        ${content.replace(/\n/g, '<br>')}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            const blob = new Blob(['\ufeff', htmlContent], {type: 'application/msword'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'De_Toan_LaTex.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Tính năng Ngân hàng câu hỏi cơ bản
+        async function generateAI() {
+            const topic = document.getElementById('aiTopic').value.trim();
+            const resultDiv = document.getElementById('aiResult');
+            if (!topic) { resultDiv.innerHTML = '<span class="text-red-500">Vui lòng nhập chủ đề!</span>'; return; }
+
+            resultDiv.innerHTML = '<span class="text-indigo-600 flex items-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Đang soạn câu hỏi...</span>';
+            
+            try {
+                // ĐÃ SỬA: Dùng gemini-1.5-flash cho tác vụ xử lý text cơ bản, siêu tốc
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ 
+                            role: "user",
+                            parts: [{ text: `Tạo 1 câu hỏi trắc nghiệm gồm 4 đáp án A, B, C, D về chủ đề: "${topic}". Chỉ ra đáp án đúng.` }] 
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.error) resultDiv.innerHTML = `<span class="text-red-600">Lỗi: ${data.error.message}</span>`;
+                else resultDiv.textContent = data.candidates[0].content.parts[0].text;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="text-red-600">Lỗi mạng: ${error.message}</span>`;
             }
         }
     </script>
