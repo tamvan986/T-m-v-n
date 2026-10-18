@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Tổ Chuyên Môn - AI Sinh Đề Toán Học</title>
+    <title>Quản Lý Tổ Chuyên Môn - Tích hợp AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
@@ -13,6 +13,12 @@
         .table-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         @keyframes flash { 0% { background-color: #e0e7ff; } 100% { background-color: #f8fafc; } }
         .flash-bg { animation: flash 1s ease-out; }
+        
+        /* Style cho K-Means Badge */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+        .nhom-0 { background-color: #fee2e2; color: #dc2626; } /* Đỏ */
+        .nhom-1 { background-color: #fef3c7; color: #d97706; } /* Vàng */
+        .nhom-2 { background-color: #d1fae5; color: #059669; } /* Xanh */
     </style>
 </head>
 <body class="bg-gray-50 font-sans h-screen flex">
@@ -23,10 +29,11 @@
             <h1 class="text-xl font-bold tracking-wider">TỔ CHUYÊN MÔN</h1>
         </div>
         <nav class="flex-1 p-4 space-y-3">
-            <button onclick="switchTab('tongquan')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Tổng quan</button>
+            <button onclick="switchTab('tongquan')" class="tab-link w-full text-left block px-4 py-2.5 bg-indigo-900 font-medium shadow-inner rounded transition hover:bg-indigo-700">Tổng quan</button>
             <button onclick="switchTab('kehoach')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Kế hoạch giáo dục</button>
+            <button onclick="switchTab('phanluong')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">AI Phân luồng</button>
             <button onclick="switchTab('nganhang')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Ngân hàng câu hỏi</button>
-            <button onclick="switchTab('taobaituongtu')" class="tab-link w-full text-left block px-4 py-2.5 bg-indigo-900 font-medium shadow-inner rounded transition">Tạo bài tương tự</button>
+            <button onclick="switchTab('taobaituongtu')" class="tab-link w-full text-left block px-4 py-2.5 rounded transition hover:bg-indigo-700">Tạo bài tương tự</button>
         </nav>
     </aside>
 
@@ -34,7 +41,7 @@
     <main class="flex-1 p-8 overflow-y-auto" id="main-container">
         
         <!-- PHÂN HỆ: TỔNG QUAN -->
-        <div id="tongquan" class="tab-content hidden max-w-[1200px] mx-auto">
+        <div id="tongquan" class="tab-content max-w-[1200px] mx-auto">
             <header class="mb-8 border-b pb-4">
                 <h2 class="text-3xl font-bold text-gray-800">Tổng quan</h2>
                 <p class="text-gray-500 mt-2">Bảng điều khiển và danh sách nhân sự Tổ chuyên môn.</p>
@@ -47,7 +54,6 @@
                             <tr class="bg-gray-100 text-gray-700 text-sm">
                                 <th class="py-3 px-4 border border-gray-200 font-semibold text-center">STT</th>
                                 <th class="py-3 px-4 border border-gray-200 font-semibold">Họ và tên</th>
-                                <th class="py-3 px-4 border border-gray-200 font-semibold">SĐT</th>
                                 <th class="py-3 px-4 border border-gray-200 font-semibold text-center">Năm sinh</th>
                                 <th class="py-3 px-4 border border-gray-200 font-semibold">Trình độ đào tạo</th>
                                 <th class="py-3 px-4 border border-gray-200 font-semibold">Phân công giảng dạy</th>
@@ -56,20 +62,20 @@
                             </tr>
                         </thead>
                         <tbody class="text-sm text-gray-700">
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">1</td><td class="py-2 px-4 border font-bold text-indigo-700">Nguyễn Văn Tâm</td><td class="py-2 px-4 border">0987023770</td><td class="py-2 px-4 border text-center">1986</td><td class="py-2 px-4 border">Thạc sĩ Toán học</td><td class="py-2 px-4 border">12A3, 12A6, 12A7</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">TTCM+CN 12A3</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">2</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Quang Trãi</td><td class="py-2 px-4 border">0916298272</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Toán - Tin học</td><td class="py-2 px-4 border">12A8,12A9,11A5,11A6</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">GVCN 12A8</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">3</td><td class="py-2 px-4 border font-medium text-gray-900">Phan Ngọc Trinh</td><td class="py-2 px-4 border">0988251350</td><td class="py-2 px-4 border text-center">1988</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">12A1, 12A2, 10A9</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">GVCN 12A1</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">4</td><td class="py-2 px-4 border font-medium text-gray-900">Phạm Phùng Khánh Tú</td><td class="py-2 px-4 border">0977738408</td><td class="py-2 px-4 border text-center">1992</td><td class="py-2 px-4 border">Thạc sĩ Toán học</td><td class="py-2 px-4 border">10A7, 10A8, 12A4, 12A5</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">GVCN 12A4</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">5</td><td class="py-2 px-4 border font-medium text-gray-900">Cao Thị Thu</td><td class="py-2 px-4 border">0989963183</td><td class="py-2 px-4 border text-center">1993</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">10A1, 12A10, 12A11</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">CN 10A1</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">6</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Thị Huyền Trân</td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border text-orange-600">Nghỉ hậu sản</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">7</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Đặng Kim Thoa</td><td class="py-2 px-4 border">0966469202</td><td class="py-2 px-4 border text-center">2001</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">10A2, 10A3, 11A1, 11A2</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">CN 11A1</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">8</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Trung Hậu</td><td class="py-2 px-4 border">0338163672</td><td class="py-2 px-4 border text-center">2003</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">10A4, 10A5, 11A7, 11A8</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">CN 11A8</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">9</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Bảo Ngưng</td><td class="py-2 px-4 border">0834988133</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Kĩ sư Tin học-CC NVSP bậc 2</td><td class="py-2 px-4 border">10A6,7,8,9-12A8,9</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border text-indigo-700">Tổ phó CM</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">10</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Thị Thanh Tuyền</td><td class="py-2 px-4 border">0366699470</td><td class="py-2 px-4 border text-center">1990</td><td class="py-2 px-4 border">Kĩ sư CNTT</td><td class="py-2 px-4 border">11A7,8-12A10,11</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">CN 12A10</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">11</td><td class="py-2 px-4 border font-medium text-gray-900">Trần Thị Thảo</td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border"></td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">12</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Mạnh Tiến</td><td class="py-2 px-4 border">0372818288</td><td class="py-2 px-4 border text-center">1999</td><td class="py-2 px-4 border">Thạc sĩ Vật lý</td><td class="py-2 px-4 border">10A3-5, 11A1-3, 11A7-8</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border"></td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">13</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Hoàng Phương</td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border">Kỹ sư Điện - Điện tử</td><td class="py-2 px-4 border">Lớp nghề</td><td class="py-2 px-4 border text-center text-green-600 font-bold">x</td><td class="py-2 px-4 border">CN lớp TC CNKT ô tô</td></tr>
-                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">14</td><td class="py-2 px-4 border font-medium text-gray-900">Hồ Minh Khương</td><td class="py-2 px-4 border">0977675850</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Cử nhân CĐ cơ khí</td><td class="py-2 px-4 border">Lớp nghề</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">Chủ nhiệm lớp cơ khí</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">1</td><td class="py-2 px-4 border font-bold text-indigo-700">Nguyễn Văn Tâm</td><td class="py-2 px-4 border text-center">1986</td><td class="py-2 px-4 border">Thạc sĩ Toán học</td><td class="py-2 px-4 border">12A3, 12A6, 12A7</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">TTCM+CN 12A3</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">2</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Quang Trãi</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Toán - Tin học</td><td class="py-2 px-4 border">12A8,12A9,11A5,11A6</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">GVCN 12A8</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">3</td><td class="py-2 px-4 border font-medium text-gray-900">Phan Ngọc Trinh</td><td class="py-2 px-4 border text-center">1988</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">12A1, 12A2, 10A9</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">GVCN 12A1</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">4</td><td class="py-2 px-4 border font-medium text-gray-900">Phạm Phùng Khánh Tú</td><td class="py-2 px-4 border text-center">1992</td><td class="py-2 px-4 border">Thạc sĩ Toán học</td><td class="py-2 px-4 border">10A7, 10A8, 12A4, 12A5</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">GVCN 12A4</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">5</td><td class="py-2 px-4 border font-medium text-gray-900">Cao Thị Thu</td><td class="py-2 px-4 border text-center">1993</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">10A1, 12A10, 12A11</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">CN 10A1</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">6</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Thị Huyền Trân</td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border text-orange-600">Nghỉ hậu sản</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">7</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Đặng Kim Thoa</td><td class="py-2 px-4 border text-center">2001</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">10A2, 10A3, 11A1, 11A2</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">CN 11A1</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">8</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Trung Hậu</td><td class="py-2 px-4 border text-center">2003</td><td class="py-2 px-4 border">Cử nhân SP Toán học</td><td class="py-2 px-4 border">10A4, 10A5, 11A7, 11A8</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">CN 11A8</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">9</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Bảo Ngưng</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Kĩ sư Tin học-CC NVSP bậc 2</td><td class="py-2 px-4 border">10A6,7,8,9-12A8,9</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border text-indigo-700">Tổ phó CM</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">10</td><td class="py-2 px-4 border font-medium text-gray-900">Lê Thị Thanh Tuyền</td><td class="py-2 px-4 border text-center">1990</td><td class="py-2 px-4 border">Kĩ sư CNTT</td><td class="py-2 px-4 border">11A7,8-12A10,11</td><td class="py-2 px-4 border text-center text-green-600 font-bold">X</td><td class="py-2 px-4 border">CN 12A10</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">11</td><td class="py-2 px-4 border font-medium text-gray-900">Trần Thị Thảo</td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border"></td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border"></td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">12</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Mạnh Tiến</td><td class="py-2 px-4 border text-center">1999</td><td class="py-2 px-4 border">Thạc sĩ Vật lý</td><td class="py-2 px-4 border">10A3-5, 11A1-3, 11A7-8</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border"></td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">13</td><td class="py-2 px-4 border font-medium text-gray-900">Nguyễn Hoàng Phương</td><td class="py-2 px-4 border text-center"></td><td class="py-2 px-4 border">Kỹ sư Điện - Điện tử</td><td class="py-2 px-4 border">Lớp nghề</td><td class="py-2 px-4 border text-center text-green-600 font-bold">x</td><td class="py-2 px-4 border">CN lớp TC CNKT ô tô</td></tr>
+                            <tr class="hover:bg-indigo-50"><td class="py-2 px-4 border text-center">14</td><td class="py-2 px-4 border font-medium text-gray-900">Hồ Minh Khương</td><td class="py-2 px-4 border text-center">1985</td><td class="py-2 px-4 border">Cử nhân CĐ cơ khí</td><td class="py-2 px-4 border">Lớp nghề</td><td class="py-2 px-4 border text-center text-green-600 font-bold"></td><td class="py-2 px-4 border">Chủ nhiệm lớp cơ khí</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -121,6 +127,43 @@
             </div>
         </div>
 
+        <!-- PHÂN HỆ: AI PHÂN LUỒNG HỌC VIÊN -->
+        <div id="phanluong" class="tab-content hidden max-w-[1200px] mx-auto">
+            <header class="mb-8 border-b pb-4">
+                <h2 class="text-3xl font-bold text-gray-800">AI Phân luồng học viên</h2>
+                <p class="text-gray-500 mt-2">Sử dụng Machine Learning (K-Means) để phân loại mức độ học tập qua điểm số.</p>
+            </header>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6 bg-gray-50 border-dashed border-2">
+                <div class="text-center">
+                    <button onclick="taiFileMauCSV()" class="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded shadow transition mb-4">📥 Tải File CSV Mẫu</button>
+                    <p class="text-gray-700 mb-2">Hoặc tải lên tệp điểm của bạn (Định dạng .csv):</p>
+                    <input type="file" id="csvFileInput" accept=".csv" class="block mx-auto text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <button id="btn-run-clustering" onclick="xuLyPhanLuong()" disabled class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed">🤖 Phân luồng tự động bằng AI</button>
+                <span id="clustering-loading" class="hidden text-orange-600 font-semibold text-sm">⏳ Máy chủ AI đang xử lý (Có thể mất đến 50s cho lần đầu tiên)...</span>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-indigo-50 text-indigo-900 text-sm border-b">
+                            <th class="py-3 px-4 font-semibold text-center">Mã Học Viên</th>
+                            <th class="py-3 px-4 font-semibold text-center">Điểm Giữa Kỳ</th>
+                            <th class="py-3 px-4 font-semibold text-center">Điểm Thi Thử</th>
+                            <th class="py-3 px-4 font-semibold text-center">Kết Quả Phân Luồng (AI)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clustering-tbody">
+                        <tr><td colspan="4" class="py-8 text-center text-gray-400">Vui lòng tải tệp .csv lên để bắt đầu.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- PHÂN HỆ: NGÂN HÀNG CÂU HỎI -->
         <div id="nganhang" class="tab-content hidden max-w-3xl mx-auto">
             <header class="mb-8 border-b pb-4">
@@ -141,12 +184,12 @@
             </div>
         </div>
 
-        <!-- PHÂN HỆ: STUDIO TẠO ĐỀ TƯƠNG TỰ (TỐI ƯU CHO TOÁN HỌC & AI VISION) -->
-        <div id="taobaituongtu" class="tab-content max-w-5xl mx-auto">
+        <!-- PHÂN HỆ: STUDIO TẠO ĐỀ TƯƠNG TỰ -->
+        <div id="taobaituongtu" class="tab-content hidden max-w-5xl mx-auto">
             <header class="mb-8 border-b pb-4 flex justify-between items-end">
                 <div>
                     <h2 class="text-3xl font-bold text-gray-800">Studio Sinh Đề Toán Học</h2>
-                    <p class="text-gray-500 mt-2">Đọc trực tiếp cấu trúc MathType, Đồ thị và Hình vẽ qua AI Vision (Gemini 1.5 Pro).</p>
+                    <p class="text-gray-500 mt-2">Đọc trực tiếp cấu trúc MathType, Đồ thị và Hình vẽ qua AI Vision.</p>
                 </div>
             </header>
 
@@ -161,20 +204,18 @@
                 </h3>
                 
                 <div class="flex flex-col md:flex-row gap-6">
-                    <!-- Khu vực File/Paste -->
                     <div class="flex-1">
                         <div id="dropzone" class="border-2 border-dashed border-indigo-300 rounded-xl p-6 text-center bg-gray-50 hover:bg-indigo-50 transition relative h-full flex flex-col justify-center items-center">
-                            <input type="file" id="fileInput" class="hidden" accept=".pdf,.png,.jpg,.jpeg,.docx" onchange="handleFileSelect(event)">
+                            <input type="file" id="mediaFileInput" class="hidden" accept=".pdf,.png,.jpg,.jpeg,.docx" onchange="handleMediaFileSelect(event)">
                             <svg class="w-10 h-10 text-indigo-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                             <p class="text-gray-700 font-medium mb-1">Click chuột vào đây rồi bấm <kbd class="bg-gray-200 px-1 rounded border border-gray-300">Ctrl</kbd> + <kbd class="bg-gray-200 px-1 rounded border border-gray-300">V</kbd></p>
                             <p class="text-sm text-gray-500 mb-4">hoặc tải lên file PDF / Ảnh / Word</p>
-                            <button onclick="document.getElementById('fileInput').click()" class="px-4 py-2 bg-white border border-indigo-200 text-indigo-700 rounded-lg hover:bg-indigo-50 transition font-medium text-sm">
+                            <button onclick="document.getElementById('mediaFileInput').click()" class="px-4 py-2 bg-white border border-indigo-200 text-indigo-700 rounded-lg hover:bg-indigo-50 transition font-medium text-sm">
                                 Chọn File
                             </button>
                         </div>
                     </div>
 
-                    <!-- Khu vực Hiển thị Dữ liệu -->
                     <div class="flex-1 flex flex-col gap-3">
                         <div id="mediaPreviewContainer" class="hidden border border-gray-200 rounded-lg p-2 bg-gray-50 relative flex justify-center items-center h-32 overflow-hidden">
                             <span id="mediaBadge" class="absolute top-0 right-0 bg-green-500 text-white text-xs px-2 py-1 rounded-bl-lg rounded-tr-lg z-10">Đã nạp file</span>
@@ -190,7 +231,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="fileStatus" class="mt-3 text-sm font-medium text-center p-2 rounded"></div>
+                <div id="fileStatus" class="mt-3 text-sm font-medium text-center p-2 rounded hidden"></div>
             </div>
 
             <!-- 2. Cấu hình & Kết quả -->
@@ -229,7 +270,6 @@
                     </div>
                 </div>
                 
-                <!-- Kết quả -->
                 <div class="mt-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Đề đã tạo (Mã LaTeX - Có thể tinh chỉnh trước khi tải):</label>
                     <textarea id="similarResult" rows="15" class="w-full font-mono text-sm border border-gray-300 p-4 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition bg-white" placeholder="Kết quả sẽ hiển thị tại đây..."></textarea>
@@ -242,12 +282,10 @@
     <script>
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
         
-        // ================= KẾT NỐI GEMINI API =================
-        const GEMINI_API_KEY = 'AIzaSyBoXkMPIlVcbBbgPGluDwJE_IuzQx-BcME'; 
+        const GEMINI_API_KEY = 'AQ.Ab8RN6KDyAQ4TMyxsIhH3uRkQ1se0wgLXvIQKkL794jaJk2dwA'; 
+        const API_RENDER_URL = 'https://api-toan-tin-congnghe.onrender.com/api/phan-luong'; 
 
-        let currentMediaBase64 = null;
-        let currentMediaMimeType = null;
-
+        // ================= KẾT NỐI GEMINI API & CHUYỂN TAB =================
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(tabId).classList.remove('hidden');
@@ -260,8 +298,8 @@
             activeLink.classList.add('bg-indigo-900', 'font-medium', 'shadow-inner');
         }
 
-        // Fake DB Kế hoạch Giáo dục
-          const planData = [
+        // ================= DB KẾ HOẠCH GIÁO DỤC =================
+        const planData = [
             // TOÁN 10
             { mon: "Toán", khoi: "10", tuan: "1-3", tiet: "1-4", bai: "Chương I: Mệnh đề", yeucau: "Thiết lập, phát biểu mệnh đề toán học. Xác định tính đúng sai của mệnh đề." },
             { mon: "Toán", khoi: "10", tuan: "3-4", tiet: "5-8", bai: "Chương I: Tập hợp và phép toán", yeucau: "Nhận biết tập hợp, thực hiện phép toán giao, hợp, hiệu, phần bù." },
@@ -354,10 +392,8 @@
             const khoi = document.getElementById('filter-khoi').value;
             const tbody = document.getElementById('plan-tbody');
             
-            // Lọc dữ liệu
             const filtered = planData.filter(item => item.mon === mon && item.khoi === khoi);
             
-            // Render HTML
             if(filtered.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-gray-500">Đang cập nhật dữ liệu...</td></tr>`;
                 return;
@@ -373,11 +409,95 @@
             `).join('');
         }
 
-        // Khởi tạo bảng ngay khi load trang
-        window.onload = renderPlan;
+        window.onload = () => {
+            switchTab('tongquan'); 
+            renderPlan();
+        };
 
+        // ================= XỬ LÝ AI PHÂN LUỒNG HỌC VIÊN =================
+        let csvData = [];
 
-        // ================= XỬ LÝ ẢNH & FILE NÂNG CAO =================
+        function taiFileMauCSV() {
+            const content = "Ma_HV,Diem_GK,Diem_ThiThu\n12A1-01,8.5,8.0\n12A1-02,4.0,4.5\n12A2-05,9.0,9.5\n12A3-12,6.5,7.0\n12A10-09,2.5,3.0";
+            const blob = new Blob(["\uFEFF" + content], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "Diem_Thi_Thu_Toan_Mau.csv";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        document.getElementById('csvFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const text = event.target.result;
+                const lines = text.split('\n').filter(l => l.trim() !== '');
+                csvData = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const cols = lines[i].split(',');
+                    if (cols.length >= 3) {
+                        csvData.push({
+                            Ma_HV: cols[0].trim(),
+                            Diem_GK: parseFloat(cols[1].trim()),
+                            Diem_ThiThu: parseFloat(cols[2].trim())
+                        });
+                    }
+                }
+                if (csvData.length > 0) {
+                    document.getElementById('btn-run-clustering').disabled = false;
+                    document.getElementById('clustering-tbody').innerHTML = `<tr><td colspan="4" class="py-4 text-center text-green-600 font-bold">Đã tải thành công dữ liệu ${csvData.length} học viên. Sẵn sàng phân luồng.</td></tr>`;
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        async function xuLyPhanLuong() {
+            if (csvData.length === 0) return;
+            const btn = document.getElementById('btn-run-clustering');
+            const loadMsg = document.getElementById('clustering-loading');
+            const tbody = document.getElementById('clustering-tbody');
+            
+            btn.disabled = true;
+            loadMsg.classList.remove('hidden');
+            tbody.innerHTML = '<tr><td colspan="4" class="py-4 text-center">Đang gửi dữ liệu phân tích K-Means...</td></tr>';
+
+            try {
+                const response = await fetch(API_RENDER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(csvData)
+                });
+                
+                if (!response.ok) throw new Error("Không thể kết nối API Render");
+                
+                const result = await response.json();
+                if (result.status === "success") {
+                    tbody.innerHTML = result.data.map(hv => {
+                        let tenNhom = hv.Nhom_KMeans === 0 ? "Cần ôn tập cơ bản" : (hv.Nhom_KMeans === 1 ? "Mức độ Khá - Giỏi" : "Mức độ Trung bình");
+                        let classMau = `nhom-${hv.Nhom_KMeans}`;
+                        return `
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="py-3 px-4 text-center font-bold">${hv.Ma_HV}</td>
+                                <td class="py-3 px-4 text-center">${hv.Diem_GK}</td>
+                                <td class="py-3 px-4 text-center">${hv.Diem_ThiThu}</td>
+                                <td class="py-3 px-4 text-center"><span class="badge ${classMau}">${tenNhom}</span></td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-red-500">Lỗi kết nối máy chủ: ${error.message}</td></tr>`;
+            } finally {
+                btn.disabled = false;
+                loadMsg.classList.add('hidden');
+            }
+        }
+
+        // ================= XỬ LÝ ẢNH & FILE CHO STUDIO SINH ĐỀ =================
         const dropzone = document.getElementById('dropzone');
         const fileStatus = document.getElementById('fileStatus');
         const mediaPreviewContainer = document.getElementById('mediaPreviewContainer');
@@ -386,25 +506,23 @@
         const pdfName = document.getElementById('pdfName');
         const textarea = document.getElementById('originalQuestion');
 
-        // Bắt sự kiện Paste (Ctrl+V)
         document.getElementById('main-container').addEventListener('paste', function(e) {
             if (e.clipboardData.files.length > 0) {
-                e.preventDefault();
-                const file = e.clipboardData.files[0];
-                if (file.type.startsWith('image/')) processMediaFile(file);
+                if(document.getElementById('taobaituongtu').classList.contains('hidden') === false){
+                    e.preventDefault();
+                    const file = e.clipboardData.files[0];
+                    if (file.type.startsWith('image/')) processMediaFile(file);
+                }
             }
         });
 
-        // Xử lý nạp file
-        async function handleFileSelect(event) {
+        async function handleMediaFileSelect(event) {
             const file = event.target.files[0];
             if (!file) return;
             
-            // Nếu là Ảnh hoặc PDF (Chuyển thành Base64 gửi nguyên bản cho AI Vision)
             if (file.type.startsWith('image/') || file.name.endsWith('.pdf')) {
                 processMediaFile(file);
             } 
-            // Nếu là Word (Cảnh báo không đọc được MathType/Hình vẽ)
             else if (file.name.endsWith('.docx')) {
                 resetMediaState();
                 fileStatus.classList.remove('hidden');
@@ -421,7 +539,6 @@
             }
         }
 
-        // Xử lý lưu Data ảnh/PDF vào bộ nhớ
         function processMediaFile(file) {
             dropzone.classList.add('flash-bg');
             setTimeout(() => dropzone.classList.remove('flash-bg'), 1000);
@@ -445,7 +562,6 @@
                     imgPreview.classList.add('hidden');
                 }
                 
-                // Trích xuất Base64 Data
                 currentMediaBase64 = dataUrl.split(',')[1];
                 currentMediaMimeType = file.type;
             };
@@ -459,7 +575,6 @@
             imgPreview.src = "";
         }
 
-        // Sự kiện kéo thả
         document.addEventListener('DOMContentLoaded', () => {
             if(dropzone) {
                 dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('bg-indigo-100'); });
@@ -467,14 +582,14 @@
                 dropzone.addEventListener('drop', e => {
                     e.preventDefault(); dropzone.classList.remove('bg-indigo-100');
                     if (e.dataTransfer.files.length) {
-                        document.getElementById('fileInput').files = e.dataTransfer.files;
-                        handleFileSelect({target: {files: e.dataTransfer.files}});
+                        document.getElementById('mediaFileInput').files = e.dataTransfer.files;
+                        handleMediaFileSelect({target: {files: e.dataTransfer.files}});
                     }
                 });
             }
         });
 
-        // ================= SINH ĐỀ TƯƠNG TỰ BẰNG GEMINI VISION =================
+        // ================= TẠO BÀI TƯƠNG TỰ VÀ NGÂN HÀNG CÂU HỎI =================
         async function generateSimilarAI() {
             const originalText = textarea.value.trim();
             const num = document.getElementById('numSimilar').value;
@@ -489,14 +604,10 @@
             resultArea.value = "Mắt thần AI đang quét và phân tích tài liệu gốc (Hình vẽ/Công thức/Chữ)... \nHệ thống đang biên dịch sang mã LaTeX và TikZ chuẩn. Thầy vui lòng chờ khoảng 10-20 giây...";
             
             try {
-                // ĐÃ SỬA: Thay thế gemini-3.8-flash bằng mô hình tiêu chuẩn hiện hành là gemini-1.5-pro
-                // gemini-1.5-pro là mô hình tư duy sâu, chuyên trị đọc hiểu file PDF, ảnh phức tạp, hình học và xuất LaTeX.
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
-                
                 const prompt = `Đóng vai một chuyên gia ra đề thi Toán/Vật lý. Dựa vào bộ tài liệu gốc được cung cấp (từ file PDF/Ảnh hoặc văn bản đính kèm).\n\nHãy phân tích cấu trúc, nhận diện chính xác các công thức toán học và hình vẽ trong tài liệu đó, sau đó tạo ra ${num} câu hỏi trắc nghiệm mới với mức độ: "${difficulty}".\n\nCHÚ Ý ĐẶC BIỆT VỀ MÃ HÓA (BẮT BUỘC):\n1. Tất cả công thức, ký hiệu toán học phải được viết lại bằng mã LaTeX chuẩn (sử dụng dấu $ cho inline và $$ cho block).\n2. Tuyệt đối không dùng ký tự Unicode đặc biệt cho toán học, phải mã hóa toàn bộ sang LaTeX.\n3. Nếu câu hỏi yêu cầu hoặc liên quan đến hình học, đồ thị hàm số, hãy TỰ ĐỘNG SÁNG TÁC MÃ LATEX TIKZ (bắt đầu bằng \\begin{tikzpicture}) để vẽ hình minh họa cho câu hỏi đó.\n4. Cấu trúc mỗi câu: Câu hỏi -> Mã TikZ (nếu có) -> 4 đáp án A, B, C, D rõ ràng.\n5. Phần cuối cùng của tài liệu xuất ra, cung cấp Bảng Đáp án và Hướng dẫn giải vắn tắt (cũng dùng LaTeX).\n\nNội dung văn bản bổ trợ: ${originalText}`;
 
                 let parts = [{ text: prompt }];
-                // Nhét Base64 ảnh/PDF vào Payload nếu có
                 if (currentMediaBase64) {
                     parts.push({
                         inlineData: {
@@ -528,7 +639,6 @@
             }
         }
 
-        // Xuất Word (.doc)
         function downloadDoc() {
             const content = document.getElementById('similarResult').value;
             if(!content || content.includes("Mắt thần AI đang quét")) {
@@ -557,7 +667,6 @@
             URL.revokeObjectURL(url);
         }
 
-        // Tính năng Ngân hàng câu hỏi cơ bản
         async function generateAI() {
             const topic = document.getElementById('aiTopic').value.trim();
             const resultDiv = document.getElementById('aiResult');
@@ -566,7 +675,6 @@
             resultDiv.innerHTML = '<span class="text-indigo-600 flex items-center"><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Đang soạn câu hỏi...</span>';
             
             try {
-                // ĐÃ SỬA: Dùng gemini-1.5-flash cho tác vụ xử lý text cơ bản, siêu tốc
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
                 const response = await fetch(url, {
                     method: 'POST',
